@@ -1,14 +1,14 @@
 ﻿using System.Security.Claims;
-using AoSP.Interfaces;
-using AoSP.ViewModel;
+using AoSP.Response;
+using AoSP.ViewModels;
 
 namespace AoSP.Services.Interfaces;
 
 public interface IAccountService
 {
-    Task<BaseResponse<ClaimsIdentity>> Register(RegisterViewModel model);
+    Task<IBaseResponse<ClaimsIdentity>> Register(RegisterViewModel model);
 
-    Task<BaseResponse<ClaimsIdentity>> Login(LoginViewModel model);
+    Task<IBaseResponse<ClaimsIdentity>> Login(LoginViewModel model);
 
-    Task<BaseResponse<bool>> ChangePassword(ChangePasswordViewModel model);
+    Task<IBaseResponse<bool>> ChangePassword(ChangePasswordViewModel model);
 }

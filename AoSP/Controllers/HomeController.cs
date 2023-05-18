@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using AoSP.Models;
+using AoSP.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AoSP.Controllers;

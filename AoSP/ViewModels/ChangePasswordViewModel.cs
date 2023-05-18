@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AoSP.ViewModel
+namespace AoSP.ViewModels
 {
     public class ChangePasswordViewModel
     {
         [Required(ErrorMessage = "Укажите логин")]
         public string UserLogin { get; set; }
-        
+
         [Required(ErrorMessage = "Введите пароль")]
         [DataType(DataType.Password)]
         [Display(Name = "Пароль")]

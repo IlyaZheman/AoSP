@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 using AoSP.Services.Interfaces;
-using AoSP.ViewModel;
+using AoSP.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;

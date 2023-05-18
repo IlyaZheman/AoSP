@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AoSP.ViewModel
+namespace AoSP.ViewModels
 {
     public class LoginViewModel
     {

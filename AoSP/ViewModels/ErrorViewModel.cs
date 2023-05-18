@@ -1,4 +1,4 @@
-namespace AoSP.Models;
+namespace AoSP.ViewModels;
 
 public class ErrorViewModel
 {

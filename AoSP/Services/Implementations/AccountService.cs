@@ -2,10 +2,10 @@
 using AoSP.Entities;
 using AoSP.Enums;
 using AoSP.Helpers;
-using AoSP.Interfaces;
 using AoSP.Repositories.Interfaces;
+using AoSP.Response;
 using AoSP.Services.Interfaces;
-using AoSP.ViewModel;
+using AoSP.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace AoSP.Services.Implementations;
@@ -23,7 +23,7 @@ public class AccountService : IAccountService
         _userRepository = userRepository;
     }
 
-    public async Task<BaseResponse<ClaimsIdentity>> Register(RegisterViewModel model)
+    public async Task<IBaseResponse<ClaimsIdentity>> Register(RegisterViewModel model)
     {
         try
         {
@@ -64,7 +64,7 @@ public class AccountService : IAccountService
         }
     }
 
-    public async Task<BaseResponse<ClaimsIdentity>> Login(LoginViewModel model)
+    public async Task<IBaseResponse<ClaimsIdentity>> Login(LoginViewModel model)
     {
         try
         {
@@ -104,7 +104,7 @@ public class AccountService : IAccountService
         }
     }
 
-    public async Task<BaseResponse<bool>> ChangePassword(ChangePasswordViewModel model)
+    public async Task<IBaseResponse<bool>> ChangePassword(ChangePasswordViewModel model)
     {
         try
         {
