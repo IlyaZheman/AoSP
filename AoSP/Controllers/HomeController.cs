@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
 using AoSP.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AoSP.Controllers;
 

@@ -1,0 +1,41 @@
+﻿@model AoSP.ViewModel.RegisterViewModel
+
+@{
+    ViewBag.Title = "Регистрация";
+    Layout = "_Layout";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div style="max-width: 35em; min-width: 17em;">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Регистрация</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-controller="Account" asp-action="Register">
+                        <div class="text-danger text-center" asp-validation-summary="All"></div>
+                        <div>
+                            <input class="form-control text-center" asp-for="Login" placeholder="Имя" type="text">
+                        </div>
+                        <div>
+                            <span class="form-text">
+                                Пароль должен быть длиной больше 6 символов и иметь только латинские символы
+                            </span>
+                            <input autocomplete="new-password" asp-for="Password" placeholder="Пароль" 
+                                   class="form-control font-weight-bold text-center" type="password">
+                        </div>
+                        <div>
+                            <input class="form-control font-weight-bold text-center" autocomplete="new-password" 
+                                   asp-for="PasswordConfirm" placeholder="Подтвердите пароль" type="password">
+                        </div>
+                        <div>
+                            <a class="btn btn-primary" asp-controller="Account" asp-action="Login" type="button">Войти</a>
+                            <button class="btn btn-success" type="submit">Создать аккаунт</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
