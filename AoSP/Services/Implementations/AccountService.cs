@@ -10,7 +10,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AoSP.Services.Implementations;
 
-// TODO::public class AccountService : IAccountService
 public class AccountService : IAccountService
 {
     private readonly IBaseRepository<User> _userRepository;
@@ -27,7 +26,7 @@ public class AccountService : IAccountService
     {
         try
         {
-            var user = await _userRepository.GetAll().FirstOrDefaultAsync(x => x.Name == model.Login);
+            var user = await _userRepository.GetAll().FirstOrDefaultAsync(x => x.Login == model.Login);
             if (user != null)
             {
                 return new BaseResponse<ClaimsIdentity>()
@@ -38,7 +37,7 @@ public class AccountService : IAccountService
 
             user = new User()
             {
-                Name = model.Login,
+                Login = model.Login,
                 Role = Role.Student,
                 Password = HashPasswordHelper.HashPassword(model.Password),
             };
@@ -50,7 +49,7 @@ public class AccountService : IAccountService
             {
                 Data = result,
                 Description = "Объект добавился",
-                StatusCode = StatusCode.OK
+                StatusCode = StatusCode.Ok
             };
         }
         catch (Exception ex)
@@ -68,7 +67,7 @@ public class AccountService : IAccountService
     {
         try
         {
-            var user = await _userRepository.GetAll().FirstOrDefaultAsync(x => x.Name == model.Login);
+            var user = await _userRepository.GetAll().FirstOrDefaultAsync(x => x.Login == model.Login);
             if (user == null)
             {
                 return new BaseResponse<ClaimsIdentity>()
@@ -90,7 +89,7 @@ public class AccountService : IAccountService
             return new BaseResponse<ClaimsIdentity>()
             {
                 Data = result,
-                StatusCode = StatusCode.OK
+                StatusCode = StatusCode.Ok
             };
         }
         catch (Exception ex)
@@ -108,7 +107,7 @@ public class AccountService : IAccountService
     {
         try
         {
-            var user = await _userRepository.GetAll().FirstOrDefaultAsync(x => x.Name == model.UserLogin);
+            var user = await _userRepository.GetAll().FirstOrDefaultAsync(x => x.Login == model.UserLogin);
             if (user == null)
             {
                 return new BaseResponse<bool>()
@@ -124,7 +123,7 @@ public class AccountService : IAccountService
             return new BaseResponse<bool>()
             {
                 Data = true,
-                StatusCode = StatusCode.OK,
+                StatusCode = StatusCode.Ok,
                 Description = "Пароль обновлен"
             };
         }

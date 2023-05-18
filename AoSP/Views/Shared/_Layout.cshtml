@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using AoSP.Enums
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="utf-8"/>
@@ -18,22 +19,54 @@
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Test" asp-action="Index">Test</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
-                    </li>
-                </ul>
-            </div>
+            @if (!User.Identity.IsAuthenticated)
+            {
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Test" asp-action="Index">Test</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                        </li>
+                    </ul>
+                </div>
+            }
+            @if (User.Identity.IsAuthenticated)
+            {
+                <form method="post" asp-controller="Account" asp-action="Logout">
+                    <input class="btn btn-danger rounded" type="submit" value="Выход"/>
+                </form>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Profile" asp-action="Detail">Profile</a>
+                        </li>
+                    </ul>
+                </div>
+
+                @if (User.IsInRole(Role.Admin.ToString()))
+                {
+                    <p>Админ</p>
+                }
+                @if (User.IsInRole(Role.Student.ToString()))
+                {
+                    <p>Студент</p>
+                }
+                @if (User.IsInRole(Role.Teacher.ToString()))
+                {
+                    <p>Учитель</p>
+                }
+            }
         </div>
     </nav>
 </header>

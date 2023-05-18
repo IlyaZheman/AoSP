@@ -3,9 +3,8 @@
     public enum StatusCode
     {
         UserNotFound = 0,
-        UserAlreadyExists = 1,
 
-        OK = 200,
+        Ok = 200,
         InternalServerError = 500
     }
 }

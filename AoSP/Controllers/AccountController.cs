@@ -25,7 +25,7 @@ public class AccountController : Controller
         if (ModelState.IsValid)
         {
             var response = await _accountService.Register(model);
-            if (response.StatusCode == Enums.StatusCode.OK)
+            if (response.StatusCode == Enums.StatusCode.Ok)
             {
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(response.Data));
@@ -48,7 +48,7 @@ public class AccountController : Controller
         if (ModelState.IsValid)
         {
             var response = await _accountService.Login(model);
-            if (response.StatusCode == Enums.StatusCode.OK)
+            if (response.StatusCode == Enums.StatusCode.Ok)
             {
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(response.Data));
@@ -75,7 +75,7 @@ public class AccountController : Controller
         if (ModelState.IsValid)
         {
             var response = await _accountService.ChangePassword(model);
-            if (response.StatusCode == Enums.StatusCode.OK)
+            if (response.StatusCode == Enums.StatusCode.Ok)
             {
                 return Json(new { description = response.Description });
             }

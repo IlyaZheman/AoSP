@@ -11,7 +11,7 @@ namespace AoSP.ViewModels
 
         [DataType(DataType.Password)]
         [Required(ErrorMessage = "Укажите пароль")]
-        [MinLength(6, ErrorMessage = "Пароль должен иметь длину больше 6 символов")]
+        [MinLength(3, ErrorMessage = "Пароль должен иметь длину больше 3 символов")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
