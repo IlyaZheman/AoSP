@@ -6,8 +6,8 @@ namespace AoSP.Services.Interfaces
 {
     public interface IProfileService
     {
-        Task<BaseResponse<ProfileViewModel>> GetProfile(string userName);
+        Task<IBaseResponse<ProfileViewModel>> GetProfile(string login);
 
-        Task<BaseResponse<Profile>> Save(ProfileViewModel model);
+        Task<IBaseResponse<Profile>> Save(ProfileViewModel model);
     }
 }

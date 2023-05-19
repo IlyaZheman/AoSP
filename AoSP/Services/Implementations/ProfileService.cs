@@ -13,14 +13,14 @@ namespace AoSP.Services.Implementations
         private readonly ILogger<ProfileService> _logger;
         private readonly IBaseRepository<Profile> _profileRepository;
 
-        public ProfileService(IBaseRepository<Profile> profileRepository,
-            ILogger<ProfileService> logger)
+        public ProfileService(ILogger<ProfileService> logger,
+            IBaseRepository<Profile> profileRepository)
         {
             _profileRepository = profileRepository;
             _logger = logger;
         }
 
-        public async Task<BaseResponse<ProfileViewModel>> GetProfile(string userName)
+        public async Task<IBaseResponse<ProfileViewModel>> GetProfile(string login)
         {
             try
             {
@@ -28,10 +28,13 @@ namespace AoSP.Services.Implementations
                     .Select(x => new ProfileViewModel()
                     {
                         Id = x.Id,
-                        // Age = x.Age,
-                        Login = x.User.Name
+                        Name = x.User.Name,
+                        Surname = x.User.Surname,
+                        Patronymic = x.User.Patronymic,
+                        Role = x.User.Role,
+                        Login = x.User.Login
                     })
-                    .FirstOrDefaultAsync(x => x.Login == userName);
+                    .FirstOrDefaultAsync(x => x.Login == login);
 
                 return new BaseResponse<ProfileViewModel>()
                 {
@@ -50,7 +53,7 @@ namespace AoSP.Services.Implementations
             }
         }
 
-        public async Task<BaseResponse<Profile>> Save(ProfileViewModel model)
+        public async Task<IBaseResponse<Profile>> Save(ProfileViewModel model)
         {
             try
             {

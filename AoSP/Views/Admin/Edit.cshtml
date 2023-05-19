@@ -1,0 +1,65 @@
+﻿@model UserViewModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <form asp-controller="Admin" asp-action="Edit" method="post">
+                    <input asp-for="Id" hidden="hidden"/>
+                    <input asp-for="Login" hidden="hidden"/>
+                    <h5 class="card-title">Данные профиля</h5>
+                    <div class="mb-3">
+                        <label class="form-label text-black-50">Имя</label>
+                        <input type="text" class="form-control" asp-for="Name">
+                        @* <div class="form-text">Длина логина должна быть от 3 до 20 символов.</div> *@
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-black-50">Фамилия</label>
+                        <input type="text" class="form-control" asp-for="Surname">
+                        @* <div class="form-text">Длина логина должна быть от 3 до 20 символов.</div> *@
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-black-50">Отчество</label>
+                        <input type="text" class="form-control" asp-for="Patronymic">
+                        @* <div class="form-text">Длина логина должна быть от 3 до 20 символов.</div> *@
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-black-50">Роль</label>
+                        <input type="text" class="form-control" asp-for="Role" disabled="disabled">
+                        @* <div class="form-text">Длина логина должна быть от 3 до 20 символов.</div> *@
+                    </div>
+                    <div class="mb-3">
+                        <button class="form-control btn btn-success" type="submit">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <form asp-controller="Admin" asp-action="Edit" method="post">
+                    <input asp-for="Id" hidden="hidden"/>
+                    <input asp-for="Name" hidden="hidden"/>
+                    <input asp-for="Surname" hidden="hidden"/>
+                    <input asp-for="Patronymic" hidden="hidden"/>
+                    <input asp-for="Role" hidden="hidden"/>
+                    <h5 class="card-title">Данные аккаунта</h5>
+                    <div class="mb-3">
+                        <label class="form-label text-black-50">Логин</label>
+                        <input id="login" type="text" placeholder="@Model.Login" class="form-control" asp-for="Login">
+                        <div class="form-text">Длина логина должна быть от 3 до 20 символов.</div>
+                    </div>
+                    <div class="mb-3">
+                        <button class="form-control btn btn-success" type="submit">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

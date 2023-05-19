@@ -17,7 +17,7 @@ namespace AoSP.Controllers
         public async Task<IActionResult> Save(ProfileViewModel model)
         {
             ModelState.Remove("Id");
-            ModelState.Remove("UserName");
+            ModelState.Remove("Login");
             if (ModelState.IsValid)
             {
                 var response = await _profileService.Save(model);
@@ -26,20 +26,22 @@ namespace AoSP.Controllers
                     return Json(new { description = response.Description });
                 }
             }
+
             return StatusCode(StatusCodes.Status500InternalServerError);
         }
-        
+
         public async Task<IActionResult> Detail()
         {
+            if (User.Identity == null)
+                throw new Exception("User identity = null");
             var userName = User.Identity.Name;
+            if (userName == null)
+                throw new Exception("User identity name = null");
             var response = await _profileService.GetProfile(userName);
-            Console.WriteLine($"Вход выполнен юзером: {User.Identity.Name}");
-            
-            if (response.StatusCode == Enums.StatusCode.Ok)
-            {
-                return View(response.Data);   
-            }
-            return View();
+            if (response == null)
+                throw new Exception($"Profile {userName} not found");
+
+            return response.StatusCode == Enums.StatusCode.Ok ? View(response.Data) : View();
         }
     }
 }

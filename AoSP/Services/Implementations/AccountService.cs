@@ -12,14 +12,17 @@ namespace AoSP.Services.Implementations;
 
 public class AccountService : IAccountService
 {
-    private readonly IBaseRepository<User> _userRepository;
     private readonly ILogger<AccountService> _logger;
+    private readonly IBaseRepository<User> _userRepository;
+    private readonly IBaseRepository<Profile> _profileRepository;
 
     public AccountService(ILogger<AccountService> logger,
-                          IBaseRepository<User> userRepository)
+                          IBaseRepository<User> userRepository,
+                          IBaseRepository<Profile> profileRepository)
     {
         _logger = logger;
         _userRepository = userRepository;
+        _profileRepository = profileRepository;
     }
 
     public async Task<IBaseResponse<ClaimsIdentity>> Register(RegisterViewModel model)
@@ -35,7 +38,7 @@ public class AccountService : IAccountService
                 };
             }
 
-            user = new User()
+            user = new User
             {
                 Login = model.Login,
                 Role = Role.Student,
@@ -43,6 +46,14 @@ public class AccountService : IAccountService
             };
 
             await _userRepository.Create(user);
+
+            var profile = new Profile()
+            {
+                UserId = user.Id,
+            };
+
+            await _profileRepository.Create(profile);
+
             var result = Authenticate(user);
 
             return new BaseResponse<ClaimsIdentity>()
@@ -138,12 +149,12 @@ public class AccountService : IAccountService
         }
     }
 
-    private ClaimsIdentity Authenticate(User user)
+    private static ClaimsIdentity Authenticate(User user)
     {
         var claims = new List<Claim>
         {
-            new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
-            new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.ToString())
+            new(ClaimsIdentity.DefaultNameClaimType, user.Login),
+            new(ClaimsIdentity.DefaultRoleClaimType, user.Role.ToString())
         };
         return new ClaimsIdentity(claims, "ApplicationCookie",
             ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);

@@ -22,22 +22,22 @@
             </button>
             @if (!User.Identity.IsAuthenticated)
             {
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Schedule</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Test" asp-action="Index">Test</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Journal</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
-                    </li>
-                </ul>
-            </div>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Schedule</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Test" asp-action="Index">Test</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Journal</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                        </li>
+                    </ul>
+                </div>
             }
             @if (User.Identity.IsAuthenticated)
             {
@@ -52,21 +52,26 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Profile" asp-action="Detail">Profile</a>
                         </li>
+
+                        @if (User.IsInRole(Role.Admin.ToString()))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Test" asp-action="Index">Test</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Admin</a>
+                            </li>
+                        }
+                        @if (User.IsInRole(Role.Student.ToString()))
+                        {
+                            <p>Студент</p>
+                        }
+                        @if (User.IsInRole(Role.Teacher.ToString()))
+                        {
+                            <p>Учитель</p>
+                        }
                     </ul>
                 </div>
-
-                @if (User.IsInRole(Role.Admin.ToString()))
-                {
-                    <p>Админ</p>
-                }
-                @if (User.IsInRole(Role.Student.ToString()))
-                {
-                    <p>Студент</p>
-                }
-                @if (User.IsInRole(Role.Teacher.ToString()))
-                {
-                    <p>Учитель</p>
-                }
             }
         </div>
     </nav>

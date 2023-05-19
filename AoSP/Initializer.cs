@@ -18,5 +18,7 @@ public static class Initializer
     {
         services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<IProfileService, ProfileService>();
+        // services.AddScoped<IAdminService, AdminService>();
+        services.AddScoped<IUserService, UserService>();
     }
 }
