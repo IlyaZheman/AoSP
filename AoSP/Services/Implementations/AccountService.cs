@@ -25,48 +25,29 @@ public class AccountService : IAccountService
         _profileRepository = profileRepository;
     }
 
-    public async Task<IBaseResponse<ClaimsIdentity>> Register(RegisterViewModel model)
+    public async Task<IBaseResponse<LoginViewModel>> Login(LoginViewModel model)
     {
         try
         {
             var user = await _userRepository.GetAll().FirstOrDefaultAsync(x => x.Login == model.Login);
-            if (user != null)
+            if (user == null)
             {
-                return new BaseResponse<ClaimsIdentity>()
+                return new BaseResponse<LoginViewModel>
                 {
-                    Description = "Пользователь с таким логином уже есть",
+                    Description = "Пользователь не найден"
                 };
             }
 
-            user = new User
+            return new BaseResponse<LoginViewModel>
             {
-                Login = model.Login,
-                Role = Role.Student,
-                Password = HashPasswordHelper.HashPassword(model.Password),
-            };
-
-            await _userRepository.Create(user);
-
-            var profile = new Profile()
-            {
-                UserId = user.Id,
-            };
-
-            await _profileRepository.Create(profile);
-
-            var result = Authenticate(user);
-
-            return new BaseResponse<ClaimsIdentity>()
-            {
-                Data = result,
-                Description = "Объект добавился",
+                Data = model,
                 StatusCode = StatusCode.Ok
             };
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"[Register]: {ex.Message}");
-            return new BaseResponse<ClaimsIdentity>()
+            _logger.LogError(ex, $"[Login]: {ex.Message}");
+            return new BaseResponse<LoginViewModel>()
             {
                 Description = ex.Message,
                 StatusCode = StatusCode.InternalServerError
@@ -74,14 +55,33 @@ public class AccountService : IAccountService
         }
     }
 
-    public async Task<IBaseResponse<ClaimsIdentity>> Login(LoginViewModel model)
+    public async Task<IBaseResponse<bool>> HasPassword(LoginViewModel model)
+    {
+        var user = await _userRepository.GetAll().FirstOrDefaultAsync(x => x.Login == model.Login);
+        if (user == null)
+        {
+            return new BaseResponse<bool>
+            {
+                Description = "Пользователь не найден"
+            };
+        }
+
+        return new BaseResponse<bool>
+        {
+            Data = !string.IsNullOrWhiteSpace(user.Password),
+            StatusCode = StatusCode.Ok
+        };
+    }
+
+    public async Task<IBaseResponse<ClaimsIdentity>> Password(PasswordViewModel model)
     {
         try
         {
             var user = await _userRepository.GetAll().FirstOrDefaultAsync(x => x.Login == model.Login);
+
             if (user == null)
             {
-                return new BaseResponse<ClaimsIdentity>()
+                return new BaseResponse<ClaimsIdentity>
                 {
                     Description = "Пользователь не найден"
                 };
@@ -89,9 +89,9 @@ public class AccountService : IAccountService
 
             if (user.Password != HashPasswordHelper.HashPassword(model.Password))
             {
-                return new BaseResponse<ClaimsIdentity>()
+                return new BaseResponse<ClaimsIdentity>
                 {
-                    Description = "Неверный пароль или логин"
+                    Description = "Неверный пароль"
                 };
             }
 
@@ -106,6 +106,42 @@ public class AccountService : IAccountService
         catch (Exception ex)
         {
             _logger.LogError(ex, $"[Login]: {ex.Message}");
+            return new BaseResponse<ClaimsIdentity>()
+            {
+                Description = ex.Message,
+                StatusCode = StatusCode.InternalServerError
+            };
+        }
+    }
+
+    public async Task<IBaseResponse<ClaimsIdentity>> CreatePassword(CreatePasswordViewModel model)
+    {
+        try
+        {
+            var user = await _userRepository.GetAll().FirstOrDefaultAsync(x => x.Login == model.Login);
+            if (user == null)
+            {
+                return new BaseResponse<ClaimsIdentity>()
+                {
+                    Description = "Пользователь не найден"
+                };
+            }
+
+            user.Password = HashPasswordHelper.HashPassword(model.Password);
+            await _userRepository.Update(user);
+
+            var result = Authenticate(user);
+
+            return new BaseResponse<ClaimsIdentity>()
+            {
+                Data = result,
+                Description = "Объект добавился",
+                StatusCode = StatusCode.Ok
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"[Register]: {ex.Message}");
             return new BaseResponse<ClaimsIdentity>()
             {
                 Description = ex.Message,

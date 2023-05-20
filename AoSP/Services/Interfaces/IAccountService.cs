@@ -6,9 +6,13 @@ namespace AoSP.Services.Interfaces;
 
 public interface IAccountService
 {
-    Task<IBaseResponse<ClaimsIdentity>> Register(RegisterViewModel model);
+    Task<IBaseResponse<LoginViewModel>> Login(LoginViewModel model);
 
-    Task<IBaseResponse<ClaimsIdentity>> Login(LoginViewModel model);
+    Task<IBaseResponse<bool>> HasPassword(LoginViewModel model);
+
+    Task<IBaseResponse<ClaimsIdentity>> Password(PasswordViewModel model);
+
+    Task<IBaseResponse<ClaimsIdentity>> CreatePassword(CreatePasswordViewModel model);
 
     Task<IBaseResponse<bool>> ChangePassword(ChangePasswordViewModel model);
 }

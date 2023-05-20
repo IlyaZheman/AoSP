@@ -1,4 +1,5 @@
-﻿using AoSP.Services.Interfaces;
+﻿using AoSP.Extensions;
+using AoSP.Services.Interfaces;
 using AoSP.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +21,33 @@ public class AdminController : Controller
     {
         var response = await _userService.GetAllUsers();
         return response.StatusCode == Enums.StatusCode.Ok ? View(response.Data) : View();
+    }
+
+    [HttpGet]
+    public IActionResult Create()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create(UserViewModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            var response = await _userService.Create(model);
+            if (response.StatusCode == Enums.StatusCode.Ok)
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+
+            return BadRequest(new { errorMessage = response.Description });
+        }
+
+        var errorMessage = ModelState.Values
+                                     .SelectMany(v => v.Errors.Select(x => x.ErrorMessage))
+                                     .ToList()
+                                     .Join();
+        return StatusCode(StatusCodes.Status500InternalServerError, new { errorMessage });
     }
 
     [HttpGet]

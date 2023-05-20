@@ -39,9 +39,11 @@ public class UserService : IUserService
 
             user = new User()
             {
+                Name = model.Name,
+                Surname = model.Surname,
+                Patronymic = model.Patronymic,
                 Login = model.Login,
                 Role = model.Role,
-                // Password = HashPasswordHelper.HashPassowrd(model.Password),
             };
 
             await _userRepository.Create(user);
@@ -155,7 +157,7 @@ public class UserService : IUserService
                     StatusCode = StatusCode.UserNotFound
                 };
             }
-            
+
             user = await _userRepository.GetAll().FirstOrDefaultAsync(x => x.Id == model.Id);
             if (user == null)
             {
@@ -170,6 +172,7 @@ public class UserService : IUserService
             user.Surname = model.Surname;
             user.Patronymic = model.Patronymic;
             user.Login = model.Login;
+            user.Role = model.Role;
 
             await _userRepository.Update(user);
 

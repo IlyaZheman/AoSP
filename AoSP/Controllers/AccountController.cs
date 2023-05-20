@@ -17,29 +17,6 @@ public class AccountController : Controller
     }
 
     [HttpGet]
-    public IActionResult Register() => View();
-
-    [HttpPost]
-    public async Task<IActionResult> Register(RegisterViewModel model)
-    {
-        if (ModelState.IsValid)
-        {
-            var response = await _accountService.Register(model);
-            if (response.StatusCode == Enums.StatusCode.Ok)
-            {
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                    new ClaimsPrincipal(response.Data));
-
-                return RedirectToAction("Index", "Home");
-            }
-
-            ModelState.AddModelError("", response.Description);
-        }
-
-        return View(model);
-    }
-
-    [HttpGet]
     public IActionResult Login() => View();
 
     [HttpPost]
@@ -50,6 +27,47 @@ public class AccountController : Controller
             var response = await _accountService.Login(model);
             if (response.StatusCode == Enums.StatusCode.Ok)
             {
+                var hasPasswordResponse = await _accountService.HasPassword(model);
+
+                if (hasPasswordResponse.StatusCode == Enums.StatusCode.Ok)
+                {
+                    Console.WriteLine($"Ok");
+                    if (hasPasswordResponse.Data)
+                    {
+                        var passwordModel = new PasswordViewModel { Login = model.Login };
+                        return RedirectToAction("Password", "Account", passwordModel);
+                    }
+                    else
+                    {
+                        var createPasswordModel = new CreatePasswordViewModel { Login = model.Login };
+                        return RedirectToAction("CreatePassword", "Account", createPasswordModel);
+                    }
+                }
+
+                ModelState.AddModelError("", hasPasswordResponse.Description);
+            }
+
+            ModelState.AddModelError("", response.Description);
+        }
+
+        return View(model);
+    }
+
+    [HttpGet]
+    public IActionResult Password(PasswordViewModel model)
+    {
+        return View(model);
+    }
+
+    [HttpPost]
+    [ActionName("Password")]
+    public async Task<IActionResult> PasswordPost(PasswordViewModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            var response = await _accountService.Password(model);
+            if (response.StatusCode == Enums.StatusCode.Ok)
+            {
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(response.Data));
 
@@ -59,7 +77,34 @@ public class AccountController : Controller
             ModelState.AddModelError("", response.Description);
         }
 
+        return View();
+    }
+
+    [HttpGet]
+    public IActionResult CreatePassword(CreatePasswordViewModel model)
+    {
         return View(model);
+    }
+
+    [HttpPost]
+    [ActionName("CreatePassword")]
+    public async Task<IActionResult> CreatePasswordPost(CreatePasswordViewModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            var response = await _accountService.CreatePassword(model);
+            if (response.StatusCode == Enums.StatusCode.Ok)
+            {
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                    new ClaimsPrincipal(response.Data));
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            ModelState.AddModelError("", response.Description);
+        }
+
+        return View();
     }
 
     [ValidateAntiForgeryToken]

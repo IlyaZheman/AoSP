@@ -1,4 +1,4 @@
-﻿@model AoSP.ViewModels.LoginViewModel
+﻿@model LoginViewModel
 
 @{
     ViewData["Title"] = "Авторизация";
@@ -19,13 +19,13 @@
                             <input class="form-control text-center" asp-for="Login" placeholder="Логин" type="text">
                             <div class="form-text">Длина логина должна быть от 3 до 20 символов.</div>
                         </div>
-                        <div>
-                            <input class="form-control text-center" autocomplete="new-password"
-                                   asp-for="Password" placeholder="Пароль" type="password">
-                        </div>
+                        @* <div> *@
+                        @*     <input class="form-control text-center" autocomplete="new-password" *@
+                        @*            asp-for="Password" placeholder="Пароль" type="password"> *@
+                        @* </div> *@
                         <div class="d-flex justify-content-between">
-                            <a class="btn btn-primary" asp-controller="Account" asp-action="Register"
-                               type="button">Создать аккаунт</a>
+                            @* <a class="btn btn-primary" asp-controller="Account" asp-action="Register" *@
+                            @*    type="button">Создать аккаунт</a> *@
                             <button class="btn btn-success">Войти</button>
                         </div>
                     </form>
