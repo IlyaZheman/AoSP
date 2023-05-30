@@ -41,9 +41,6 @@
             }
             @if (User.Identity.IsAuthenticated)
             {
-                <form method="post" asp-controller="Account" asp-action="Logout">
-                    <input class="btn btn-danger rounded" type="submit" value="Выход"/>
-                </form>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
@@ -70,6 +67,12 @@
                         {
                             <p>Учитель</p>
                         }
+
+                        <li class="nav-item">
+                            <form method="post" asp-controller="Account" asp-action="Logout">
+                                <input class="btn btn-outline-danger rounded" type="submit" value="Выход"/>
+                            </form>
+                        </li>
                     </ul>
                 </div>
             }
