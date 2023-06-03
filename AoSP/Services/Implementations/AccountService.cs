@@ -14,15 +14,12 @@ public class AccountService : IAccountService
 {
     private readonly ILogger<AccountService> _logger;
     private readonly IBaseRepository<User> _userRepository;
-    private readonly IBaseRepository<Profile> _profileRepository;
 
     public AccountService(ILogger<AccountService> logger,
-                          IBaseRepository<User> userRepository,
-                          IBaseRepository<Profile> profileRepository)
+        IBaseRepository<User> userRepository)
     {
         _logger = logger;
         _userRepository = userRepository;
-        _profileRepository = profileRepository;
     }
 
     public async Task<IBaseResponse<LoginViewModel>> Login(LoginViewModel model)

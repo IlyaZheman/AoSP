@@ -7,11 +7,14 @@ namespace AoSP;
 
 public sealed class ApplicationContext : DbContext
 {
-    public DbSet<User> Users { get; set; }
-    public DbSet<Profile> Profiles { get; set; }
+    public DbSet<Group> Groups { get; set; } = null!;
+    public DbSet<User> Users { get; set; } = null!;
+    public DbSet<PersonalSubject> PersonalSubjects { get; set; } = null!;
+    public DbSet<PersonalSubjectTask> PersonalSubjectTasks { get; set; } = null!;
 
     public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
     {
+        // Database.EnsureDeleted();
         Database.EnsureCreated();
     }
 
@@ -19,32 +22,73 @@ public sealed class ApplicationContext : DbContext
     {
         modelBuilder.Entity<User>(builder =>
         {
-            builder.ToTable("Users").HasKey(x => x.Id);
+            // builder.ToTable("Users").HasKey(x => x.Id);
 
-            builder.HasData(
-                new User { Id = 1, Login = "admin", Password = HashPasswordHelper.HashPassword("admin"), Role = Role.Admin },
-                new User { Id = 2, Login = "test", Password = HashPasswordHelper.HashPassword("test"), Role = Role.Student});
+            builder.HasData(new User
+                {
+                    Id = 1,
+                    Login = "admin",
+                    Password = HashPasswordHelper.HashPassword("admin"),
+                    Role = Role.Admin,
+                    GroupId = 1,
+                },
+                new User
+                {
+                    Id = 2,
+                    Login = "test",
+                    Password = HashPasswordHelper.HashPassword("test"),
+                    Role = Role.Student,
+                    GroupId = 1,
+                });
 
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
+            // builder.Property(x => x.Password).IsRequired();
+            // builder.Property(x => x.Login).HasMaxLength(100).IsRequired();
 
-            builder.Property(x => x.Password).IsRequired();
-            builder.Property(x => x.Login).HasMaxLength(100).IsRequired();
+            builder.HasOne(s => s.Group)
+                .WithMany(g => g.Users)
+                .HasForeignKey(s => s.GroupId);
 
-            builder.HasOne(x => x.Profile)
-                   .WithOne(x => x.User)
-                   .HasPrincipalKey<User>(x => x.Id)
-                   .OnDelete(DeleteBehavior.Cascade);
+            // builder.HasMany(g => g.PersonalSubjects)
+            //     .WithOne(s => s.User)
+            //     .HasForeignKey(s => s.UserId);
         });
-
-        modelBuilder.Entity<Profile>(builder =>
+        
+        modelBuilder.Entity<Group>(builder =>
         {
-            builder.ToTable("Profiles").HasKey(x => x.Id);
-
+            builder.HasData(new Group
+            {
+                Id = 1,
+                Title = "IVT",
+            });
+            
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
-            builder.HasData(
-                new Profile { Id = 1, UserId = 1 },
-                new Profile { Id = 2, UserId = 2});
+            builder.HasMany(g => g.Users)
+                .WithOne(s => s.Group)
+                .HasForeignKey(s => s.GroupId);
         });
+
+        // modelBuilder.Entity<PersonalSubject>(builder =>
+        // {
+        //     builder.Property(x => x.Id).ValueGeneratedOnAdd();
+        //
+        //     builder.HasOne(s => s.User)
+        //         .WithMany(g => g.PersonalSubjects)
+        //         .HasForeignKey(s => s.UserId);
+        //
+        //     builder.HasMany(g => g.PersonalSubjectTasks)
+        //         .WithOne(s => s.PersonalSubject)
+        //         .HasForeignKey(s => s.PersonalSubjectId);
+        // });
+        
+        // modelBuilder.Entity<PersonalSubjectTask>(builder =>
+        // {
+        //     builder.Property(x => x.Id).ValueGeneratedOnAdd();
+        //
+        //     builder.HasOne(s => s.PersonalSubject)
+        //         .WithMany(g => g.PersonalSubjectTasks)
+        //         .HasForeignKey(s => s.PersonalSubjectId);
+        // });
     }
 }

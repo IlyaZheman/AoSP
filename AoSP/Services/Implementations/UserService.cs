@@ -11,16 +11,13 @@ namespace AoSP.Services.Implementations;
 public class UserService : IUserService
 {
     private readonly ILogger<UserService> _logger;
-    private readonly IBaseRepository<Profile> _profileRepository;
     private readonly IBaseRepository<User> _userRepository;
 
     public UserService(ILogger<UserService> logger,
-                       IBaseRepository<User> userRepository,
-                       IBaseRepository<Profile> profileRepository)
+        IBaseRepository<User> userRepository)
     {
         _logger = logger;
         _userRepository = userRepository;
-        _profileRepository = profileRepository;
     }
 
     public async Task<IBaseResponse<User>> Create(UserViewModel model)
@@ -37,23 +34,13 @@ public class UserService : IUserService
                 };
             }
 
-            user = new User()
+            user = new User
             {
-                Name = model.Name,
-                Surname = model.Surname,
-                Patronymic = model.Patronymic,
                 Login = model.Login,
                 Role = model.Role,
             };
 
             await _userRepository.Create(user);
-
-            var profile = new Profile()
-            {
-                UserId = user.Id,
-            };
-
-            await _profileRepository.Create(profile);
 
             return new BaseResponse<User>()
             {
@@ -77,22 +64,22 @@ public class UserService : IUserService
     {
         try
         {
-            var users = await _userRepository.GetAll()
-                                             .Select(x => new UserViewModel
-                                             {
-                                                 Id = x.Id,
-                                                 Name = x.Name,
-                                                 Surname = x.Surname,
-                                                 Patronymic = x.Patronymic,
-                                                 Login = x.Login,
-                                                 Role = x.Role
-                                             })
-                                             .ToListAsync();
+            var users = await _userRepository.GetAll().ToListAsync();
+
+            var views = users.Select(user => new UserViewModel
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Surname = user.Surname,
+                Patronymic = user.Patronymic,
+                Login = user.Login,
+                Role = user.Role
+            });
 
             _logger.LogInformation($"[UserService.GetUsers] получено элементов {users.Count}");
             return new BaseResponse<IEnumerable<UserViewModel>>()
             {
-                Data = users,
+                Data = views,
                 StatusCode = StatusCode.Ok
             };
         }
@@ -141,17 +128,18 @@ public class UserService : IUserService
         }
     }
 
-    public async Task<IBaseResponse<User>> Edit(int id, UserViewModel model)
+    public async Task<IBaseResponse<UserViewModel>> Edit(int id, UserViewModel model)
     {
         try
         {
             var user = await _userRepository.GetAll()
-                                            .Where(x => x.Login == model.Login)
-                                            .Where(x => x.Id != model.Id)
-                                            .FirstOrDefaultAsync();
+                .Where(x => x.Login == model.Login)
+                .Where(x => x.Id != model.Id)
+                .FirstOrDefaultAsync();
+
             if (user != null)
             {
-                return new BaseResponse<User>()
+                return new BaseResponse<UserViewModel>()
                 {
                     Description = "This login is already in use",
                     StatusCode = StatusCode.UserNotFound
@@ -161,30 +149,31 @@ public class UserService : IUserService
             user = await _userRepository.GetAll().FirstOrDefaultAsync(x => x.Id == model.Id);
             if (user == null)
             {
-                return new BaseResponse<User>()
+                return new BaseResponse<UserViewModel>()
                 {
                     Description = "User not found",
                     StatusCode = StatusCode.UserNotFound
                 };
             }
 
-            user.Name = model.Name;
-            user.Surname = model.Surname;
-            user.Patronymic = model.Patronymic;
             user.Login = model.Login;
             user.Role = model.Role;
 
+            user.Name = model.Name;
+            user.Surname = model.Surname;
+            user.Patronymic = model.Patronymic;
+
             await _userRepository.Update(user);
 
-            return new BaseResponse<User>()
+            return new BaseResponse<UserViewModel>()
             {
-                Data = user,
+                Data = model,
                 StatusCode = StatusCode.Ok,
             };
         }
         catch (Exception ex)
         {
-            return new BaseResponse<User>()
+            return new BaseResponse<UserViewModel>()
             {
                 Description = $"[Edit] : {ex.Message}",
                 StatusCode = StatusCode.InternalServerError
@@ -226,8 +215,41 @@ public class UserService : IUserService
         {
             return new BaseResponse<UserViewModel>()
             {
-                Description = $"[GetCar] : {ex.Message}",
+                Description = $"[GetUser] : {ex.Message}",
                 StatusCode = StatusCode.InternalServerError
+            };
+        }
+    }
+
+    public async Task<IBaseResponse<ProfileViewModel>> GetProfile(string login)
+    {
+        try
+        {
+            var profile = await _userRepository.GetAll()
+                .Select(x => new ProfileViewModel()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Surname = x.Surname,
+                    Patronymic = x.Patronymic,
+                    Role = x.Role,
+                    Login = x.Login
+                })
+                .FirstOrDefaultAsync(x => x.Login == login);
+
+            return new BaseResponse<ProfileViewModel>()
+            {
+                Data = profile,
+                StatusCode = StatusCode.Ok
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"[ProfileService.GetProfile] error: {ex.Message}");
+            return new BaseResponse<ProfileViewModel>()
+            {
+                StatusCode = StatusCode.InternalServerError,
+                Description = $"Внутренняя ошибка: {ex.Message}"
             };
         }
     }

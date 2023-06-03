@@ -1,0 +1,48 @@
+﻿@model IEnumerable<GroupViewModel>
+
+@{
+    ViewData["Title"] = "title";
+    Layout = "_Layout";
+}
+
+<h2>title</h2>
+
+<a class="btn btn-outline-success" asp-area="" asp-controller="Admin" asp-action="CreateUser" method="get">Create</a>
+
+<table class="table">
+    @* <thead> *@
+    @* <tr> *@
+    @*     <th>@Model.Select(item => nameof(item.Id)).FirstOrDefault()</th> *@
+    @*     <th>@Model.Select(item => nameof(item.Surname)).FirstOrDefault()</th> *@
+    @*     <th>@Model.Select(item => nameof(item.Name)).FirstOrDefault()</th> *@
+    @*     <th>@Model.Select(item => nameof(item.Patronymic)).FirstOrDefault()</th> *@
+    @*     <th>@Model.Select(item => nameof(item.Login)).FirstOrDefault()</th> *@
+    @*     <th>@Model.Select(item => nameof(item.Role)).FirstOrDefault()</th> *@
+    @*     <th></th> *@
+    @* </tr> *@
+    @* </thead> *@
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.Title</td>
+            @* <td> *@
+            @*     <a class="btn btn-outline-success" asp-area="" asp-controller="Admin" asp-action="EditUser" asp-route-id="@item.Id" method="get">Edit</a> *@
+            @*     <a class="btn btn-outline-danger" asp-area="" asp-controller="Admin" asp-action="DeleteUser" asp-route-id="@item.Id">Delete</a> *@
+            @* </td> *@
+        </tr>
+        <tr>
+            @foreach (var user in item.Users)
+            {
+                <td>@user.Id</td>
+                <td>@user.Surname</td>
+                <td>@user.Name</td>
+                <td>@user.Patronymic</td>
+                <td>@user.Login</td>
+                <td>@user.Role</td>
+            }
+        </tr>
+    }
+    </tbody>
+</table>

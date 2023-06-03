@@ -1,33 +1,15 @@
 ﻿using AoSP.Services.Interfaces;
-using AoSP.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AoSP.Controllers
 {
     public class ProfileController : Controller
     {
-        private readonly IProfileService _profileService;
+        private readonly IUserService _userService;
 
-        public ProfileController(IProfileService profileService)
+        public ProfileController(IUserService userService)
         {
-            _profileService = profileService;
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Save(ProfileViewModel model)
-        {
-            ModelState.Remove("Id");
-            ModelState.Remove("Login");
-            if (ModelState.IsValid)
-            {
-                var response = await _profileService.Save(model);
-                if (response.StatusCode == Enums.StatusCode.Ok)
-                {
-                    return Json(new { description = response.Description });
-                }
-            }
-
-            return StatusCode(StatusCodes.Status500InternalServerError);
+            _userService = userService;
         }
 
         public async Task<IActionResult> Detail()
@@ -37,7 +19,7 @@ namespace AoSP.Controllers
             var userName = User.Identity.Name;
             if (userName == null)
                 throw new Exception("User identity name = null");
-            var response = await _profileService.GetProfile(userName);
+            var response = await _userService.GetProfile(userName);
             if (response == null)
                 throw new Exception($"Profile {userName} not found");
 

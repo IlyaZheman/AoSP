@@ -9,49 +9,52 @@ public class AdminController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly IUserService _userService;
+    private readonly IGroupService _groupService;
 
     public AdminController(ILogger<HomeController> logger,
-                           IUserService userService)
+        IUserService userService,
+        IGroupService groupService)
     {
         _logger = logger;
         _userService = userService;
+        _groupService = groupService;
     }
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Users()
     {
         var response = await _userService.GetAllUsers();
         return response.StatusCode == Enums.StatusCode.Ok ? View(response.Data) : View();
     }
 
     [HttpGet]
-    public IActionResult Create()
+    public IActionResult CreateUser()
     {
         return View();
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(UserViewModel model)
+    public async Task<IActionResult> CreateUser(UserViewModel model)
     {
         if (ModelState.IsValid)
         {
             var response = await _userService.Create(model);
             if (response.StatusCode == Enums.StatusCode.Ok)
             {
-                return RedirectToAction("Index", "Admin");
+                return RedirectToAction("Users", "Admin");
             }
 
             return BadRequest(new { errorMessage = response.Description });
         }
 
         var errorMessage = ModelState.Values
-                                     .SelectMany(v => v.Errors.Select(x => x.ErrorMessage))
-                                     .ToList()
-                                     .Join();
+            .SelectMany(v => v.Errors.Select(x => x.ErrorMessage))
+            .ToList()
+            .Join();
         return StatusCode(StatusCodes.Status500InternalServerError, new { errorMessage });
     }
 
     [HttpGet]
-    public async Task<IActionResult> Edit(int id)
+    public async Task<IActionResult> EditUser(int id)
     {
         var response = await _userService.GetUser(id);
 
@@ -65,14 +68,14 @@ public class AdminController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Edit(int id, UserViewModel model)
+    public async Task<IActionResult> EditUser(int id, UserViewModel model)
     {
         if (ModelState.IsValid)
         {
             var response = await _userService.Edit(id, model);
             if (response.StatusCode == Enums.StatusCode.Ok)
             {
-                return RedirectToAction("Index", "Admin");
+                return RedirectToAction("Users", "Admin");
             }
 
             ModelState.AddModelError("", response.Description);
@@ -81,19 +84,25 @@ public class AdminController : Controller
         return View(model);
     }
 
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> DeleteUser(int id)
     {
         if (ModelState.IsValid)
         {
             var response = await _userService.DeleteUser(id);
             if (response.StatusCode == Enums.StatusCode.Ok)
             {
-                return RedirectToAction("Index", "Admin");
+                return RedirectToAction("Users", "Admin");
             }
 
             ModelState.AddModelError("", response.Description);
         }
 
         throw new Exception($"User ({id}) not deleted");
+    }
+
+    public async Task<IActionResult> Groups()
+    {
+        var response = await _groupService.GetAllGroups();
+        return response.StatusCode == Enums.StatusCode.Ok ? View(response.Data) : View();
     }
 }

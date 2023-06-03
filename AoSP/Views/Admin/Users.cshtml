@@ -7,7 +7,7 @@
 
 <h2>title</h2>
 
-<a class="btn btn-outline-success" asp-area="" asp-controller="Admin" asp-action="Create" method="get">Create</a>
+<a class="btn btn-outline-success" asp-area="" asp-controller="Admin" asp-action="CreateUser" method="get">Create</a>
 
 <table class="table">
     <thead>
@@ -32,8 +32,8 @@
             <td>@item.Login</td>
             <td>@item.Role</td>
             <td>
-                <a class="btn btn-outline-success" asp-area="" asp-controller="Admin" asp-action="Edit" asp-route-id="@item.Id" method="get">Edit</a>
-                <a class="btn btn-outline-danger" asp-area="" asp-controller="Admin" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a class="btn btn-outline-success" asp-area="" asp-controller="Admin" asp-action="EditUser" asp-route-id="@item.Id" method="get">Edit</a>
+                <a class="btn btn-outline-danger" asp-area="" asp-controller="Admin" asp-action="DeleteUser" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
     }
