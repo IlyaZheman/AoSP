@@ -4,6 +4,6 @@ public class PersonalSubject
 {
     public int Id { get; set; }
     public int? UserId { get; set; }
-    public User? User { get; set; }
-    public ICollection<PersonalSubjectTask> PersonalSubjectTasks { get; set; }
+    public virtual User? User { get; set; }
+    public virtual ICollection<PersonalSubjectTask> PersonalSubjectTasks { get; set; }
 }
