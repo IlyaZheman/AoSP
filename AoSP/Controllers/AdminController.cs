@@ -7,17 +7,14 @@ namespace AoSP.Controllers;
 
 public class AdminController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
     private readonly IUserService _userService;
-    private readonly IGroupService _groupService;
+    private readonly IGradeService _gradeService;
 
-    public AdminController(ILogger<HomeController> logger,
-        IUserService userService,
-        IGroupService groupService)
+    public AdminController(IUserService userService,
+        IGradeService gradeService)
     {
-        _logger = logger;
         _userService = userService;
-        _groupService = groupService;
+        _gradeService = gradeService;
     }
 
     public async Task<IActionResult> Users()
@@ -100,9 +97,33 @@ public class AdminController : Controller
         throw new Exception($"User ({id}) not deleted");
     }
 
-    public async Task<IActionResult> Groups()
+    [HttpGet]
+    public async Task<IActionResult> Grade()
     {
-        var response = await _groupService.GetAllGroups();
-        return response.StatusCode == Enums.StatusCode.Ok ? View(response.Data) : View();
+        var response = await _gradeService.GetGrade(1);
+        if (response.StatusCode == Enums.StatusCode.Ok)
+        {
+            return View(response.Data);
+        }
+
+        ModelState.AddModelError("", response.Description);
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Grade(GradeViewModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            var response = await _gradeService.GetGrade(model.SelectedGroupId);
+            if (response.StatusCode == Enums.StatusCode.Ok)
+            {
+                return View(response.Data);
+            }
+
+            ModelState.AddModelError("", response.Description);
+        }
+
+        return View();
     }
 }

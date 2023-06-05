@@ -1,0 +1,43 @@
+﻿@model GradeViewModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            <form asp-controller="Admin" asp-action="Grade" method="post">
+                <select class="form-control" asp-for="SelectedGroupId">
+                    @foreach (var group in Model.Groups)
+                    {
+                        if (group.Id == Model.SelectedGroupId || Model.SelectedGroupId == 0)
+                        {
+                            <option value="@group.Id" selected>@group.Title</option>
+                        }
+                        else
+                        {
+                            <option value="@group.Id">@group.Title</option>
+                        }
+                    }
+                </select>
+                <input class="btn btn-outline-success rounded" type="submit" value="Submit"/>
+            </form>
+        </div>
+    </div>
+    @{
+        var group = Model.Groups.FirstOrDefault(x => x.Id == Model.SelectedGroupId);
+    }
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">@group.Title</h5>
+            <ul class="flex-grow-1">
+                @foreach (var user in group.Subjects)
+                {
+                    <li>@user.Title</li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>

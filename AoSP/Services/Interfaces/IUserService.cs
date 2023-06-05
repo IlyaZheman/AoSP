@@ -11,5 +11,5 @@ public interface IUserService
     Task<IBaseResponse<bool>> DeleteUser(long id);
     Task<IBaseResponse<UserViewModel>> Edit(int id, UserViewModel model);
     Task<IBaseResponse<UserViewModel>> GetUser(int id);
-    Task<IBaseResponse<ProfileViewModel>> GetProfile(string login);
+    Task<IBaseResponse<UserViewModel>> GetProfile(string login);
 }

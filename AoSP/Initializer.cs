@@ -18,6 +18,6 @@ public static class Initializer
     {
         services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<IUserService, UserService>();
-        services.AddScoped<IGroupService, GroupService>();
+        services.AddScoped<IGradeService, GradeService>();
     }
 }

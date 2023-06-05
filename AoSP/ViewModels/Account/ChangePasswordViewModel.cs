@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AoSP.ViewModels
+namespace AoSP.ViewModels.Account
 {
     public class ChangePasswordViewModel
     {

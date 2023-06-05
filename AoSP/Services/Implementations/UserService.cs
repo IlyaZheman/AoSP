@@ -221,12 +221,12 @@ public class UserService : IUserService
         }
     }
 
-    public async Task<IBaseResponse<ProfileViewModel>> GetProfile(string login)
+    public async Task<IBaseResponse<UserViewModel>> GetProfile(string login)
     {
         try
         {
             var profile = await _userRepository.GetAll()
-                .Select(x => new ProfileViewModel()
+                .Select(x => new UserViewModel()
                 {
                     Id = x.Id,
                     Name = x.Name,
@@ -237,7 +237,7 @@ public class UserService : IUserService
                 })
                 .FirstOrDefaultAsync(x => x.Login == login);
 
-            return new BaseResponse<ProfileViewModel>()
+            return new BaseResponse<UserViewModel>()
             {
                 Data = profile,
                 StatusCode = StatusCode.Ok
@@ -246,7 +246,7 @@ public class UserService : IUserService
         catch (Exception ex)
         {
             _logger.LogError(ex, $"[ProfileService.GetProfile] error: {ex.Message}");
-            return new BaseResponse<ProfileViewModel>()
+            return new BaseResponse<UserViewModel>()
             {
                 StatusCode = StatusCode.InternalServerError,
                 Description = $"Внутренняя ошибка: {ex.Message}"

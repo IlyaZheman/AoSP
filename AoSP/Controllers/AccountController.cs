@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 using AoSP.Services.Interfaces;
-using AoSP.ViewModels;
+using AoSP.ViewModels.Account;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
@@ -127,7 +127,6 @@ public class AccountController : Controller
         }
 
         var modelError = ModelState.Values.SelectMany(v => v.Errors);
-
         return StatusCode(StatusCodes.Status500InternalServerError, new { modelError.FirstOrDefault().ErrorMessage });
     }
 }

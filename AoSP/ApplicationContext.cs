@@ -11,6 +11,8 @@ public sealed class ApplicationContext : DbContext
     public DbSet<User> Users { get; set; } = null!;
     public DbSet<PersonalSubject> PersonalSubjects { get; set; } = null!;
     public DbSet<PersonalSubjectTask> PersonalSubjectTasks { get; set; } = null!;
+    public DbSet<Subject> Subjects { get; set; } = null!;
+    public DbSet<SubjectTask> SubjectTasks { get; set; } = null!;
 
     public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
     {
@@ -25,9 +27,29 @@ public sealed class ApplicationContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Group>(builder =>
+        {
+            builder.Property(x => x.Id).ValueGeneratedOnAdd();
+
+            builder.HasData(new Group
+                {
+                    Id = 1,
+                    Title = "ИВТ",
+                },
+                new Group
+                {
+                    Id = 2,
+                    Title = "ИСТ",
+                });
+
+            builder.HasMany(g => g.Students)
+                .WithOne(s => s.Group)
+                .HasForeignKey(s => s.GroupId);
+        });
+
         modelBuilder.Entity<User>(builder =>
         {
-            // builder.ToTable("Users").HasKey(x => x.Id);
+            builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
             builder.HasData(new User
                 {
@@ -74,37 +96,13 @@ public sealed class ApplicationContext : DbContext
                     GroupId = 2,
                 });
 
-            builder.Property(x => x.Id).ValueGeneratedOnAdd();
-            // builder.Property(x => x.Password).IsRequired();
-            // builder.Property(x => x.Login).HasMaxLength(100).IsRequired();
-
             builder.HasOne(s => s.Group)
-                .WithMany(g => g.Users)
+                .WithMany(g => g.Students)
                 .HasForeignKey(s => s.GroupId);
 
             builder.HasMany(g => g.PersonalSubjects)
                 .WithOne(s => s.User)
                 .HasForeignKey(s => s.UserId);
-        });
-
-        modelBuilder.Entity<Group>(builder =>
-        {
-            builder.HasData(new Group
-                {
-                    Id = 1,
-                    Title = "ИВТ",
-                },
-                new Group
-                {
-                    Id = 2,
-                    Title = "ИСТ",
-                });
-
-            builder.Property(x => x.Id).ValueGeneratedOnAdd();
-
-            builder.HasMany(g => g.Users)
-                .WithOne(s => s.Group)
-                .HasForeignKey(s => s.GroupId);
         });
 
         modelBuilder.Entity<PersonalSubject>(builder =>
@@ -114,11 +112,13 @@ public sealed class ApplicationContext : DbContext
             builder.HasData(new PersonalSubject
                 {
                     Id = 1,
+                    SubjectId = 1,
                     UserId = 2,
                 },
                 new PersonalSubject
                 {
                     Id = 2,
+                    SubjectId = 3,
                     UserId = 4,
                 });
 
@@ -151,6 +151,72 @@ public sealed class ApplicationContext : DbContext
             builder.HasOne(s => s.PersonalSubject)
                 .WithMany(g => g.PersonalSubjectTasks)
                 .HasForeignKey(s => s.PersonalSubjectId);
+        });
+
+        modelBuilder.Entity<Subject>(builder =>
+        {
+            builder.Property(x => x.Id).ValueGeneratedOnAdd();
+
+            builder.HasData(new Subject
+                {
+                    Id = 1,
+                    Title = "Math",
+                    GroupId = 1,
+                },
+                new Subject
+                {
+                    Id = 2,
+                    Title = "Phis",
+                    GroupId = 1,
+                },
+                new Subject
+                {
+                    Id = 3,
+                    Title = "Rus",
+                    GroupId = 2,
+                },
+                new Subject
+                {
+                    Id = 4,
+                    Title = "Eng",
+                    GroupId = 2,
+                });
+
+            builder.HasOne(s => s.Group)
+                .WithMany(g => g.Subjects)
+                .HasForeignKey(s => s.GroupId);
+
+            builder.HasMany(g => g.SubjectTasks)
+                .WithOne(s => s.Subject)
+                .HasForeignKey(s => s.SubjectId);
+        });
+
+        modelBuilder.Entity<SubjectTask>(builder =>
+        {
+            builder.Property(x => x.Id).ValueGeneratedOnAdd();
+
+            builder.HasData(new SubjectTask
+                {
+                    Id = 1,
+                    Description = "Get Task #1",
+                    SubjectId = 1,
+                },
+                new SubjectTask
+                {
+                    Id = 2,
+                    Description = "Get Task #2",
+                    SubjectId = 1,
+                },
+                new SubjectTask
+                {
+                    Id = 3,
+                    Description = "Get Task #3",
+                    SubjectId = 2,
+                });
+
+            builder.HasOne(s => s.Subject)
+                .WithMany(g => g.SubjectTasks)
+                .HasForeignKey(s => s.SubjectId);
         });
     }
 }
