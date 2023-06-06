@@ -5,7 +5,6 @@ using AoSP.Helpers;
 using AoSP.Repositories.Interfaces;
 using AoSP.Response;
 using AoSP.Services.Interfaces;
-using AoSP.ViewModels;
 using AoSP.ViewModels.Account;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,13 +12,10 @@ namespace AoSP.Services.Implementations;
 
 public class AccountService : IAccountService
 {
-    private readonly ILogger<AccountService> _logger;
     private readonly IBaseRepository<User> _userRepository;
 
-    public AccountService(ILogger<AccountService> logger,
-        IBaseRepository<User> userRepository)
+    public AccountService(IBaseRepository<User> userRepository)
     {
-        _logger = logger;
         _userRepository = userRepository;
     }
 
@@ -44,7 +40,6 @@ public class AccountService : IAccountService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"[Login]: {ex.Message}");
             return new BaseResponse<LoginViewModel>()
             {
                 Description = ex.Message,
@@ -71,7 +66,7 @@ public class AccountService : IAccountService
         };
     }
 
-    public async Task<IBaseResponse<ClaimsIdentity>> Password(PasswordViewModel model)
+    public async Task<IBaseResponse<ClaimsIdentity>> EnterPassword(PasswordViewModel model)
     {
         try
         {
@@ -103,7 +98,6 @@ public class AccountService : IAccountService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"[Login]: {ex.Message}");
             return new BaseResponse<ClaimsIdentity>()
             {
                 Description = ex.Message,
@@ -139,7 +133,6 @@ public class AccountService : IAccountService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"[Register]: {ex.Message}");
             return new BaseResponse<ClaimsIdentity>()
             {
                 Description = ex.Message,
@@ -174,7 +167,6 @@ public class AccountService : IAccountService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"[ChangePassword]: {ex.Message}");
             return new BaseResponse<bool>()
             {
                 Description = ex.Message,

@@ -19,7 +19,7 @@ public class AdminController : Controller
 
     public async Task<IActionResult> Users()
     {
-        var response = await _userService.GetAllUsers();
+        var response = await _userService.GetAll();
         return response.StatusCode == Enums.StatusCode.Ok ? View(response.Data) : View();
     }
 
@@ -53,7 +53,7 @@ public class AdminController : Controller
     [HttpGet]
     public async Task<IActionResult> EditUser(int id)
     {
-        var response = await _userService.GetUser(id);
+        var response = await _userService.Get(id);
 
         if (response.StatusCode == Enums.StatusCode.Ok)
         {
@@ -85,7 +85,7 @@ public class AdminController : Controller
     {
         if (ModelState.IsValid)
         {
-            var response = await _userService.DeleteUser(id);
+            var response = await _userService.Delete(id);
             if (response.StatusCode == Enums.StatusCode.Ok)
             {
                 return RedirectToAction("Users", "Admin");
@@ -100,7 +100,7 @@ public class AdminController : Controller
     [HttpGet]
     public async Task<IActionResult> Grade()
     {
-        var response = await _gradeService.GetGrade(1);
+        var response = await _gradeService.Get(1);
         if (response.StatusCode == Enums.StatusCode.Ok)
         {
             return View(response.Data);
@@ -115,7 +115,7 @@ public class AdminController : Controller
     {
         if (ModelState.IsValid)
         {
-            var response = await _gradeService.GetGrade(model.SelectedGroupId);
+            var response = await _gradeService.Get(model.SelectedGroupId);
             if (response.StatusCode == Enums.StatusCode.Ok)
             {
                 return View(response.Data);
@@ -125,5 +125,35 @@ public class AdminController : Controller
         }
 
         return View();
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> CreateGroup()
+    {
+        return View(new GroupViewModel { Users = new List<UserViewModel>() });
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateGroup(GroupViewModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            return View(model);
+
+            // var response = await _gradeService.Create(model);
+            // if (response.StatusCode == Enums.StatusCode.Ok)
+            // {
+            //     return RedirectToAction("Grade", "Admin");
+            // }
+
+            // ModelState.AddModelError("", response.Description);
+        }
+
+        return View(model);
+    }
+
+    public async Task<IActionResult> CreateStudent()
+    {
+        return PartialView("_StudentList", new UserViewModel());
     }
 }

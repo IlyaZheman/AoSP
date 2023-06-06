@@ -1,0 +1,66 @@
+﻿@model GroupViewModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<form asp-action="CreateGroup" asp-controller="Admin" method="post">
+    <div id="editorRows">
+        @* <input type="hidden" name="" value="@Model.StoryId" /> *@
+        @foreach (var item in Model.Users)
+        {
+            @await Html.PartialAsync("_StudentList", item)
+        }
+    </div>
+    <a id="addItem" asp-action="CreateStudent" asp-controller="Admin">Add Sentence...</a>
+    <br/>
+    <input type="submit" id="submit" value="Finished"/>
+</form>
+
+@section scripts {
+    <script>
+        $("#submit").click(function (e) {
+            e.preventDefault();
+            var formData = new FormData();
+
+            $("input[name='Name']").each(function (i) {
+                var Name = $(this).val();
+                formData.append("Users[" + i + "].Name", Name);
+
+            });
+            $("input[name='Surname']").each(function (i) {
+                var Surname = $(this).val();
+                formData.append("Users[" + i + "].Surname", Surname);
+
+            });
+            $("input[name='Patronymic']").each(function (i) {
+                var Patronymic = $(this).val();
+                formData.append("Users[" + i + "].Patronymic", Patronymic);
+
+            });
+
+            $.ajax({
+                method: 'post',
+                url: '@Url.Action("CreateGroup", "Admin")',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function () {
+
+                }
+            });
+        });
+
+        $("#addItem").click(function () {
+            $.ajax({
+                url: '@Url.Action("CreateStudent", "Admin")',
+                cache: false,
+                success: function (html) {
+                    $("#editorRows").append(html);
+                }
+            });
+            return false;
+        });
+    </script>
+}

@@ -12,7 +12,7 @@
                 <select class="form-control" asp-for="SelectedGroupId">
                     @foreach (var group in Model.Groups)
                     {
-                        if (group.Id == Model.SelectedGroupId || Model.SelectedGroupId == 0)
+                        if (group.Id == Model.SelectedGroupId)
                         {
                             <option value="@group.Id" selected>@group.Title</option>
                         }
@@ -22,7 +22,12 @@
                         }
                     }
                 </select>
-                <input class="btn btn-outline-success rounded" type="submit" value="Submit"/>
+                <div class="d-flex justify-content-between">
+                    <input class="btn btn-outline-success rounded" type="submit" value="Выбрать"/>
+                    <a class="btn btn-outline-info rounded" asp-controller="Admin" asp-action="CreateGroup" type="button">
+                        Создать группу
+                    </a>
+                </div>
             </form>
         </div>
     </div>
@@ -31,13 +36,16 @@
     }
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title">@group.Title</h5>
-            <ul class="flex-grow-1">
-                @foreach (var user in group.Subjects)
-                {
-                    <li>@user.Title</li>
-                }
-            </ul>
+            @if (group != default)
+            {
+                <h5 class="card-title">@group.Title</h5>
+                <ul class="flex-grow-1">
+                    @foreach (var user in group.Subjects)
+                    {
+                        <li>@user.Title</li>
+                    }
+                </ul>
+            }
         </div>
     </div>
 </div>

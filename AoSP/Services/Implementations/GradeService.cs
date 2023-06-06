@@ -10,17 +10,14 @@ namespace AoSP.Services.Implementations;
 
 public class GradeService : IGradeService
 {
-    private readonly ILogger<UserService> _logger;
     private readonly IBaseRepository<Group> _groupRepository;
 
-    public GradeService(ILogger<UserService> logger,
-        IBaseRepository<Group> groupRepository)
+    public GradeService(IBaseRepository<Group> groupRepository)
     {
-        _logger = logger;
         _groupRepository = groupRepository;
     }
 
-    public async Task<BaseResponse<GradeViewModel>> GetGrade(int selectedGroupId)
+    public async Task<BaseResponse<GradeViewModel>> Get(int selectedGroupId)
     {
         try
         {
@@ -55,7 +52,6 @@ public class GradeService : IGradeService
                 }).ToList()
             };
 
-            _logger.LogInformation($"[UserService.GetUsers] получено элементов {groups.Count}");
             return new BaseResponse<GradeViewModel>()
             {
                 Data = views,
@@ -64,8 +60,45 @@ public class GradeService : IGradeService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"[UserService.GetUsers] error: {ex.Message}");
             return new BaseResponse<GradeViewModel>()
+            {
+                StatusCode = StatusCode.InternalServerError,
+                Description = $"Внутренняя ошибка: {ex.Message}"
+            };
+        }
+    }
+
+    public async Task<BaseResponse<Group>> Create(GroupViewModel model)
+    {
+        try
+        {
+            var group = await _groupRepository.GetAll().FirstOrDefaultAsync(x => x.Title == model.Title);
+            if (group != null)
+            {
+                return new BaseResponse<Group>()
+                {
+                    Description = "Группа с таким названием уже есть",
+                    StatusCode = StatusCode.GroupAlreadyExist
+                };
+            }
+
+            group = new Group
+            {
+                Title = model.Title,
+            };
+
+            await _groupRepository.Create(group);
+
+            return new BaseResponse<Group>()
+            {
+                Data = group,
+                Description = "Группа добавлена",
+                StatusCode = StatusCode.Ok
+            };
+        }
+        catch (Exception ex)
+        {
+            return new BaseResponse<Group>()
             {
                 StatusCode = StatusCode.InternalServerError,
                 Description = $"Внутренняя ошибка: {ex.Message}"

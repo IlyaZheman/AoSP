@@ -10,13 +10,10 @@ namespace AoSP.Services.Implementations;
 
 public class UserService : IUserService
 {
-    private readonly ILogger<UserService> _logger;
     private readonly IBaseRepository<User> _userRepository;
 
-    public UserService(ILogger<UserService> logger,
-        IBaseRepository<User> userRepository)
+    public UserService(IBaseRepository<User> userRepository)
     {
-        _logger = logger;
         _userRepository = userRepository;
     }
 
@@ -51,7 +48,6 @@ public class UserService : IUserService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"[UserService.Create] error: {ex.Message}");
             return new BaseResponse<User>()
             {
                 StatusCode = StatusCode.InternalServerError,
@@ -60,7 +56,7 @@ public class UserService : IUserService
         }
     }
 
-    public async Task<BaseResponse<IEnumerable<UserViewModel>>> GetAllUsers()
+    public async Task<BaseResponse<IEnumerable<UserViewModel>>> GetAll()
     {
         try
         {
@@ -76,7 +72,6 @@ public class UserService : IUserService
                 Role = user.Role
             });
 
-            _logger.LogInformation($"[UserService.GetUsers] получено элементов {users.Count}");
             return new BaseResponse<IEnumerable<UserViewModel>>()
             {
                 Data = views,
@@ -85,7 +80,6 @@ public class UserService : IUserService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"[UserService.GetUsers] error: {ex.Message}");
             return new BaseResponse<IEnumerable<UserViewModel>>()
             {
                 StatusCode = StatusCode.InternalServerError,
@@ -94,7 +88,7 @@ public class UserService : IUserService
         }
     }
 
-    public async Task<IBaseResponse<bool>> DeleteUser(long id)
+    public async Task<IBaseResponse<bool>> Delete(long id)
     {
         try
         {
@@ -109,7 +103,6 @@ public class UserService : IUserService
             }
 
             await _userRepository.Delete(user);
-            _logger.LogInformation($"[UserService.DeleteUser] пользователь удален");
 
             return new BaseResponse<bool>
             {
@@ -119,7 +112,6 @@ public class UserService : IUserService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"[UserSerivce.DeleteUser] error: {ex.Message}");
             return new BaseResponse<bool>()
             {
                 StatusCode = StatusCode.InternalServerError,
@@ -181,7 +173,7 @@ public class UserService : IUserService
         }
     }
 
-    public async Task<IBaseResponse<UserViewModel>> GetUser(int id)
+    public async Task<IBaseResponse<UserViewModel>> Get(int id)
     {
         try
         {
@@ -221,7 +213,7 @@ public class UserService : IUserService
         }
     }
 
-    public async Task<IBaseResponse<UserViewModel>> GetProfile(string login)
+    public async Task<IBaseResponse<UserViewModel>> Get(string login)
     {
         try
         {
@@ -245,7 +237,6 @@ public class UserService : IUserService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"[ProfileService.GetProfile] error: {ex.Message}");
             return new BaseResponse<UserViewModel>()
             {
                 StatusCode = StatusCode.InternalServerError,

@@ -5,7 +5,8 @@
         UserNotFound = 0,
         UserAlreadyExists = 1,
 
-        ProfileNotFound = 10,
+        GroupNotFound = 10,
+        GroupAlreadyExist = 11,
         
         Ok = 200,
         InternalServerError = 500

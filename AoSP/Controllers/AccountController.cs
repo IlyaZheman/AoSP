@@ -65,7 +65,7 @@ public class AccountController : Controller
     {
         if (ModelState.IsValid)
         {
-            var response = await _accountService.Password(model);
+            var response = await _accountService.EnterPassword(model);
             if (response.StatusCode == Enums.StatusCode.Ok)
             {
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,

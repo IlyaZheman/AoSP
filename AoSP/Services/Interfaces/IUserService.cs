@@ -7,9 +7,9 @@ namespace AoSP.Services.Interfaces;
 public interface IUserService
 {
     Task<IBaseResponse<User>> Create(UserViewModel model);
-    Task<BaseResponse<IEnumerable<UserViewModel>>> GetAllUsers();
-    Task<IBaseResponse<bool>> DeleteUser(long id);
+    Task<BaseResponse<IEnumerable<UserViewModel>>> GetAll();
+    Task<IBaseResponse<UserViewModel>> Get(int id);
+    Task<IBaseResponse<UserViewModel>> Get(string login);
     Task<IBaseResponse<UserViewModel>> Edit(int id, UserViewModel model);
-    Task<IBaseResponse<UserViewModel>> GetUser(int id);
-    Task<IBaseResponse<UserViewModel>> GetProfile(string login);
+    Task<IBaseResponse<bool>> Delete(long id);
 }

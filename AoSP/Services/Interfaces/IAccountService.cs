@@ -11,7 +11,7 @@ public interface IAccountService
 
     Task<IBaseResponse<bool>> HasPassword(LoginViewModel model);
 
-    Task<IBaseResponse<ClaimsIdentity>> Password(PasswordViewModel model);
+    Task<IBaseResponse<ClaimsIdentity>> EnterPassword(PasswordViewModel model);
 
     Task<IBaseResponse<ClaimsIdentity>> CreatePassword(CreatePasswordViewModel model);
 
