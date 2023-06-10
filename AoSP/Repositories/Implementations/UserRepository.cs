@@ -1,40 +1,39 @@
 ﻿using AoSP.Entities;
 using AoSP.Repositories.Interfaces;
 
-namespace AoSP.Repositories.Implementations
+namespace AoSP.Repositories.Implementations;
+
+public class UserRepository : IBaseRepository<User>
 {
-    public class UserRepository : IBaseRepository<User>
+    private readonly ApplicationContext _db;
+
+    public UserRepository(ApplicationContext db)
     {
-        private readonly ApplicationContext _db;
+        _db = db;
+    }
 
-        public UserRepository(ApplicationContext db)
-        {
-            _db = db;
-        }
+    public IQueryable<User> GetAll()
+    {
+        return _db.Users;
+    }
 
-        public IQueryable<User> GetAll()
-        {
-            return _db.Users;
-        }
+    public async Task Delete(User entity)
+    {
+        _db.Users.Remove(entity);
+        await _db.SaveChangesAsync();
+    }
 
-        public async Task Delete(User entity)
-        {
-            _db.Users.Remove(entity);
-            await _db.SaveChangesAsync();
-        }
+    public async Task Create(User entity)
+    {
+        await _db.Users.AddAsync(entity);
+        await _db.SaveChangesAsync();
+    }
 
-        public async Task Create(User entity)
-        {
-            await _db.Users.AddAsync(entity);
-            await _db.SaveChangesAsync();
-        }
+    public async Task<User> Update(User entity)
+    {
+        _db.Users.Update(entity);
+        await _db.SaveChangesAsync();
 
-        public async Task<User> Update(User entity)
-        {
-            _db.Users.Update(entity);
-            await _db.SaveChangesAsync();
-
-            return entity;
-        }
+        return entity;
     }
 }

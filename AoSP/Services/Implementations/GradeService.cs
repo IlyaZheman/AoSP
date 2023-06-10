@@ -1,5 +1,6 @@
 ﻿using AoSP.Entities;
 using AoSP.Enums;
+using AoSP.Helpers;
 using AoSP.Repositories.Interfaces;
 using AoSP.Response;
 using AoSP.Services.Interfaces;
@@ -17,19 +18,32 @@ public class GradeService : IGradeService
         _groupRepository = groupRepository;
     }
 
-    public async Task<BaseResponse<GradeViewModel>> Get(int selectedGroupId)
+    public async Task<BaseResponse<GradeViewModel>> Get(string? selectedGroupId = null)
     {
         try
         {
             var groups = await _groupRepository.GetAll().ToListAsync();
 
+            if (groups == null || groups.Count <= 0)
+            {
+                return new BaseResponse<GradeViewModel>()
+                {
+                    Data = new GradeViewModel
+                    {
+                        SelectedGroupId = "",
+                        Groups = new System.Collections.Generic.List<GroupViewModel>()
+                    },
+                    StatusCode = StatusCode.Ok
+                };
+            }
+
             var views = new GradeViewModel
             {
-                SelectedGroupId = selectedGroupId,
+                SelectedGroupId = selectedGroupId ?? groups.First().Id,
                 Groups = groups.Select(group => new GroupViewModel
                 {
-                    Id = group.Id,
-                    Title = group.Title,
+                    GroupId = group.Id,
+                    GroupTitle = group.Title,
                     Subjects = group.Subjects.Select(subject => new SubjectViewModel
                     {
                         Id = subject.Id,
@@ -40,7 +54,7 @@ public class GradeService : IGradeService
                             Description = subjectTask.Description
                         }).ToList()
                     }).ToList(),
-                    Users = group.Students.Select(user => new UserViewModel
+                    Students = group.Students.Select(user => new UserViewModel
                     {
                         Id = user.Id,
                         Name = user.Name,
@@ -72,7 +86,7 @@ public class GradeService : IGradeService
     {
         try
         {
-            var group = await _groupRepository.GetAll().FirstOrDefaultAsync(x => x.Title == model.Title);
+            var group = await _groupRepository.GetAll().FirstOrDefaultAsync(x => x.Title == model.GroupTitle);
             if (group != null)
             {
                 return new BaseResponse<Group>()
@@ -84,8 +98,47 @@ public class GradeService : IGradeService
 
             group = new Group
             {
-                Title = model.Title,
+                Id = Helper.GenerateId(),
+                Title = model.GroupTitle,
+                Students = model.Students.Select(x => new User
+                {
+                    Id = Helper.GenerateId(),
+                    Name = x.Name,
+                    Surname = x.Surname,
+                    Patronymic = x.Patronymic,
+                    Role = Role.Student
+                }).ToList(),
+                Subjects = model.Subjects.Select(x =>
+                {
+                    var teacherId = Helper.GenerateId();
+                    return new Subject
+                    {
+                        Id = Helper.GenerateId(),
+                        Title = x.Title,
+                        TeacherId = teacherId,
+                        Teacher = new User
+                        {
+                            Id = teacherId,
+                            Name = x.Teacher.Name,
+                            Surname = x.Teacher.Surname,
+                            Patronymic = x.Teacher.Patronymic,
+                            Role = Role.Teacher
+                        }
+                    };
+                }).ToList(),
             };
+
+            foreach (var student in group.Students)
+            {
+                student.Group = group;
+                student.GroupId = group.Id;
+            }
+
+            foreach (var subject in group.Subjects)
+            {
+                subject.Group = group;
+                subject.GroupId = group.Id;
+            }
 
             await _groupRepository.Create(group);
 

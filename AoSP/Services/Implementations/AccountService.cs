@@ -80,7 +80,7 @@ public class AccountService : IAccountService
                 };
             }
 
-            if (user.Password != HashPasswordHelper.HashPassword(model.Password))
+            if (user.Password != Helper.HashPassword(model.Password))
             {
                 return new BaseResponse<ClaimsIdentity>
                 {
@@ -119,7 +119,7 @@ public class AccountService : IAccountService
                 };
             }
 
-            user.Password = HashPasswordHelper.HashPassword(model.Password);
+            user.Password = Helper.HashPassword(model.Password);
             await _userRepository.Update(user);
 
             var result = Authenticate(user);
@@ -155,7 +155,7 @@ public class AccountService : IAccountService
                 };
             }
 
-            user.Password = HashPasswordHelper.HashPassword(model.NewPassword);
+            user.Password = Helper.HashPassword(model.NewPassword);
             await _userRepository.Update(user);
 
             return new BaseResponse<bool>()

@@ -1,5 +1,4 @@
-﻿using AoSP.Extensions;
-using AoSP.Services.Interfaces;
+﻿using AoSP.Services.Interfaces;
 using AoSP.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,90 +16,10 @@ public class AdminController : Controller
         _gradeService = gradeService;
     }
 
-    public async Task<IActionResult> Users()
-    {
-        var response = await _userService.GetAll();
-        return response.StatusCode == Enums.StatusCode.Ok ? View(response.Data) : View();
-    }
-
-    [HttpGet]
-    public IActionResult CreateUser()
-    {
-        return View();
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> CreateUser(UserViewModel model)
-    {
-        if (ModelState.IsValid)
-        {
-            var response = await _userService.Create(model);
-            if (response.StatusCode == Enums.StatusCode.Ok)
-            {
-                return RedirectToAction("Users", "Admin");
-            }
-
-            return BadRequest(new { errorMessage = response.Description });
-        }
-
-        var errorMessage = ModelState.Values
-            .SelectMany(v => v.Errors.Select(x => x.ErrorMessage))
-            .ToList()
-            .Join();
-        return StatusCode(StatusCodes.Status500InternalServerError, new { errorMessage });
-    }
-
-    [HttpGet]
-    public async Task<IActionResult> EditUser(int id)
-    {
-        var response = await _userService.Get(id);
-
-        if (response.StatusCode == Enums.StatusCode.Ok)
-        {
-            return View(response.Data);
-        }
-
-        ModelState.AddModelError("", response.Description);
-        return View();
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> EditUser(int id, UserViewModel model)
-    {
-        if (ModelState.IsValid)
-        {
-            var response = await _userService.Edit(id, model);
-            if (response.StatusCode == Enums.StatusCode.Ok)
-            {
-                return RedirectToAction("Users", "Admin");
-            }
-
-            ModelState.AddModelError("", response.Description);
-        }
-
-        return View(model);
-    }
-
-    public async Task<IActionResult> DeleteUser(int id)
-    {
-        if (ModelState.IsValid)
-        {
-            var response = await _userService.Delete(id);
-            if (response.StatusCode == Enums.StatusCode.Ok)
-            {
-                return RedirectToAction("Users", "Admin");
-            }
-
-            ModelState.AddModelError("", response.Description);
-        }
-
-        throw new Exception($"User ({id}) not deleted");
-    }
-
     [HttpGet]
     public async Task<IActionResult> Grade()
     {
-        var response = await _gradeService.Get(1);
+        var response = await _gradeService.Get();
         if (response.StatusCode == Enums.StatusCode.Ok)
         {
             return View(response.Data);
@@ -130,7 +49,7 @@ public class AdminController : Controller
     [HttpGet]
     public async Task<IActionResult> CreateGroup()
     {
-        return View(new GroupViewModel { Users = new List<UserViewModel>() });
+        return View(new GroupViewModel());
     }
 
     [HttpPost]
@@ -138,22 +57,72 @@ public class AdminController : Controller
     {
         if (ModelState.IsValid)
         {
-            return View(model);
+            var response = await _gradeService.Create(model);
+            if (response.StatusCode == Enums.StatusCode.Ok)
+            {
+                return RedirectToAction("Grade", "Admin");
+            }
 
-            // var response = await _gradeService.Create(model);
-            // if (response.StatusCode == Enums.StatusCode.Ok)
-            // {
-            //     return RedirectToAction("Grade", "Admin");
-            // }
-
-            // ModelState.AddModelError("", response.Description);
+            ModelState.AddModelError("", response.Description);
         }
 
         return View(model);
     }
 
-    public async Task<IActionResult> CreateStudent()
+    [HttpGet]
+    public async Task<IActionResult> EditUser(string id)
     {
-        return PartialView("_StudentList", new UserViewModel());
+        var response = await _userService.Get(id);
+
+        if (response.StatusCode == Enums.StatusCode.Ok)
+        {
+            return View(response.Data);
+        }
+
+        ModelState.AddModelError("", response.Description);
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> EditUser(UserViewModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            var response = await _userService.Edit(model);
+            if (response.StatusCode == Enums.StatusCode.Ok)
+            {
+                return RedirectToAction("Grade", "Admin");
+            }
+
+            ModelState.AddModelError("", response.Description);
+        }
+
+        return View(model);
+    }
+
+    public async Task<IActionResult> DeleteUser(string id)
+    {
+        if (ModelState.IsValid)
+        {
+            var response = await _userService.Delete(id);
+            if (response.StatusCode == Enums.StatusCode.Ok)
+            {
+                return RedirectToAction("Grade", "Admin");
+            }
+
+            ModelState.AddModelError("", response.Description);
+        }
+
+        throw new Exception($"User ({id}) not deleted");
+    }
+
+    public async Task<IActionResult> AddStudent()
+    {
+        return PartialView("_Student", new UserViewModel());
+    }
+
+    public async Task<IActionResult> AddSubject()
+    {
+        return PartialView("_Subject", new SubjectViewModel());
     }
 }

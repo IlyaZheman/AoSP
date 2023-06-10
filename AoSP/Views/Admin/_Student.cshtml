@@ -1,16 +1,15 @@
 ﻿@model UserViewModel
 
-<div class="editorRow">
-
+<div class="student">
     <span>Name: </span> @Html.EditorFor(m => m.Name)
     <span>Surname: </span> @Html.EditorFor(m => m.Surname)
     <span>Patronymic: </span> @Html.EditorFor(m => m.Patronymic)
-    <a href="#" class="deleteRow">delete</a>
+    <a href="#" class="delete">delete</a>
 </div>
 
 <script>
-    $("a.deleteRow").on("click", function () {
-        $(this).parents("div.editorRow:first").remove();
+    $("a.delete").on("click", function () {
+        $(this).parents("div.student:first").remove();
         return false;
     });
 </script>

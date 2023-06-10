@@ -34,7 +34,7 @@ public class UserService : IUserService
             user = new User
             {
                 Login = model.Login,
-                Role = model.Role,
+                Role = model.Role ?? Role.Student,
             };
 
             await _userRepository.Create(user);
@@ -88,7 +88,7 @@ public class UserService : IUserService
         }
     }
 
-    public async Task<IBaseResponse<bool>> Delete(long id)
+    public async Task<IBaseResponse<bool>> Delete(string id)
     {
         try
         {
@@ -120,7 +120,7 @@ public class UserService : IUserService
         }
     }
 
-    public async Task<IBaseResponse<UserViewModel>> Edit(int id, UserViewModel model)
+    public async Task<IBaseResponse<UserViewModel>> Edit(UserViewModel model)
     {
         try
         {
@@ -149,7 +149,7 @@ public class UserService : IUserService
             }
 
             user.Login = model.Login;
-            user.Role = model.Role;
+            user.Role = model.Role ?? Role.Student;
 
             user.Name = model.Name;
             user.Surname = model.Surname;
@@ -173,7 +173,7 @@ public class UserService : IUserService
         }
     }
 
-    public async Task<IBaseResponse<UserViewModel>> Get(int id)
+    public async Task<IBaseResponse<UserViewModel>> Get(string id)
     {
         try
         {
@@ -213,7 +213,7 @@ public class UserService : IUserService
         }
     }
 
-    public async Task<IBaseResponse<UserViewModel>> Get(string login)
+    public async Task<IBaseResponse<UserViewModel>> GetByUserName(string login)
     {
         try
         {

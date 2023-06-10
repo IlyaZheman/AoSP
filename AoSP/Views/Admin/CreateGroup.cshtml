@@ -6,16 +6,26 @@
 }
 
 <form asp-action="CreateGroup" asp-controller="Admin" method="post">
-    <div id="editorRows">
-        @* <input type="hidden" name="" value="@Model.StoryId" /> *@
-        @foreach (var item in Model.Users)
-        {
-            @await Html.PartialAsync("_StudentList", item)
-        }
+    <input id="groupTitle" type="text" class="form-control" asp-for="GroupTitle">
+    <div>
+        <div id="students">
+            @foreach (var item in Model.Students)
+            {
+                @await Html.PartialAsync("_Student", item)
+            }
+        </div>
+        <a id="addStudent" asp-action="AddStudent" asp-controller="Admin">Add Student</a>
     </div>
-    <a id="addItem" asp-action="CreateStudent" asp-controller="Admin">Add Sentence...</a>
-    <br/>
-    <input type="submit" id="submit" value="Finished"/>
+    <div>
+        <div id="subjects">
+            @foreach (var item in Model.Subjects)
+            {
+                @await Html.PartialAsync("_Subject", item)
+            }
+        </div>
+        <a id="addSubject" asp-action="AddSubject" asp-controller="Admin">Add Subject</a>
+    </div>
+    <input type="submit" id="submit" value="Save"/>
 </form>
 
 @section scripts {
@@ -24,22 +34,41 @@
             e.preventDefault();
             var formData = new FormData();
 
+            $("input[name='GroupTitle']").each(function () {
+                var GroupTitle = $(this).val();
+                formData.append("GroupTitle", GroupTitle);
+            });
+            
             $("input[name='Name']").each(function (i) {
                 var Name = $(this).val();
-                formData.append("Users[" + i + "].Name", Name);
-
+                formData.append("Students[" + i + "].Name", Name);
             });
             $("input[name='Surname']").each(function (i) {
                 var Surname = $(this).val();
-                formData.append("Users[" + i + "].Surname", Surname);
-
+                formData.append("Students[" + i + "].Surname", Surname);
             });
             $("input[name='Patronymic']").each(function (i) {
                 var Patronymic = $(this).val();
-                formData.append("Users[" + i + "].Patronymic", Patronymic);
-
+                formData.append("Students[" + i + "].Patronymic", Patronymic);
             });
-
+            
+            $("input[name='Title']").each(function (i) {
+                var Title = $(this).val();
+                formData.append("Subjects[" + i + "].Title", Title);
+            });
+            $("input[name='Teacher.Name']").each(function (i) {
+                var Name = $(this).val();
+                formData.append("Subjects[" + i + "].Teacher.Name", Name);
+            });
+            $("input[name='Teacher.Surname']").each(function (i) {
+                var Surname = $(this).val();
+                formData.append("Subjects[" + i + "].Teacher.Surname", Surname);
+            });
+            $("input[name='Teacher.Patronymic']").each(function (i) {
+                var Patronymic = $(this).val();
+                formData.append("Subjects[" + i + "].Teacher.Patronymic", Patronymic);
+            });
+            
             $.ajax({
                 method: 'post',
                 url: '@Url.Action("CreateGroup", "Admin")',
@@ -47,17 +76,27 @@
                 processData: false,
                 contentType: false,
                 success: function () {
-
                 }
             });
         });
 
-        $("#addItem").click(function () {
+        $("#addStudent").click(function () {
             $.ajax({
-                url: '@Url.Action("CreateStudent", "Admin")',
+                url: '@Url.Action("AddStudent", "Admin")',
                 cache: false,
                 success: function (html) {
-                    $("#editorRows").append(html);
+                    $("#students").append(html);
+                }
+            });
+            return false;
+        });
+        
+        $("#addSubject").click(function () {
+            $.ajax({
+                url: '@Url.Action("AddSubject", "Admin")',
+                cache: false,
+                success: function (html) {
+                    $("#subjects").append(html);
                 }
             });
             return false;

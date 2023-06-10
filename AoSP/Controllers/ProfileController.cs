@@ -19,7 +19,7 @@ namespace AoSP.Controllers
             var userName = User.Identity.Name;
             if (userName == null)
                 throw new Exception("User identity name = null");
-            var response = await _userService.Get(userName);
+            var response = await _userService.GetByUserName(userName);
             if (response == null)
                 throw new Exception($"Profile {userName} not found");
 

@@ -12,13 +12,13 @@
                 <select class="form-control" asp-for="SelectedGroupId">
                     @foreach (var group in Model.Groups)
                     {
-                        if (group.Id == Model.SelectedGroupId)
+                        if (!string.IsNullOrEmpty(Model.SelectedGroupId) && group.GroupId == Model.SelectedGroupId)
                         {
-                            <option value="@group.Id" selected>@group.Title</option>
+                            <option value="@group.GroupId" selected>@group.GroupTitle</option>
                         }
                         else
                         {
-                            <option value="@group.Id">@group.Title</option>
+                            <option value="@group.GroupId">@group.GroupTitle</option>
                         }
                     }
                 </select>
@@ -32,13 +32,16 @@
         </div>
     </div>
     @{
-        var group = Model.Groups.FirstOrDefault(x => x.Id == Model.SelectedGroupId);
+        var group = Model.Groups.FirstOrDefault();
+        if (!string.IsNullOrEmpty(Model.SelectedGroupId))
+            group = Model.Groups.FirstOrDefault(x => x.GroupId == Model.SelectedGroupId);
+        
     }
     <div class="card">
         <div class="card-body">
             @if (group != default)
             {
-                <h5 class="card-title">@group.Title</h5>
+                <h5 class="card-title">@group.GroupTitle</h5>
                 <ul class="flex-grow-1">
                     @foreach (var user in group.Subjects)
                     {

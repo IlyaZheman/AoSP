@@ -1,0 +1,16 @@
+﻿@model SubjectViewModel
+
+<div class="subject">
+    <span>Title: </span> @Html.EditorFor(m => m.Title)
+    <span>Teacher Name: </span> @Html.EditorFor(m => m.Teacher.Name)
+    <span>Teacher Surname: </span> @Html.EditorFor(m => m.Teacher.Surname)
+    <span>Teacher Patronymic: </span> @Html.EditorFor(m => m.Teacher.Patronymic)
+    <a href="#" class="delete">delete</a>
+</div>
+
+<script>
+    $("a.delete").on("click", function () {
+        $(this).parents("div.subject:first").remove();
+        return false;
+    });
+</script>

@@ -6,6 +6,6 @@ namespace AoSP.Services.Interfaces;
 
 public interface IGradeService
 {
-    Task<BaseResponse<GradeViewModel>> Get(int selectedGroupId);
+    Task<BaseResponse<GradeViewModel>> Get(string? selectedGroupId = null);
     Task<BaseResponse<Group>> Create(GroupViewModel model);
 }
