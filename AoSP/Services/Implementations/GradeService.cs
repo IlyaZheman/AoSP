@@ -108,23 +108,17 @@ public class GradeService : IGradeService
                     Patronymic = x.Patronymic,
                     Role = Role.Student
                 }).ToList(),
-                Subjects = model.Subjects.Select(x =>
+                Subjects = model.Subjects.Select(x => new Subject
                 {
-                    var teacherId = Helper.GenerateId();
-                    return new Subject
+                    Title = x.Title,
+                    Teacher = new User
                     {
                         Id = Helper.GenerateId(),
-                        Title = x.Title,
-                        TeacherId = teacherId,
-                        Teacher = new User
-                        {
-                            Id = teacherId,
-                            Name = x.Teacher.Name,
-                            Surname = x.Teacher.Surname,
-                            Patronymic = x.Teacher.Patronymic,
-                            Role = Role.Teacher
-                        }
-                    };
+                        Name = x.Teacher.Name,
+                        Surname = x.Teacher.Surname,
+                        Patronymic = x.Teacher.Patronymic,
+                        Role = Role.Teacher
+                    }
                 }).ToList(),
             };
 

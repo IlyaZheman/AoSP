@@ -32,12 +32,6 @@ public sealed class ApplicationContext : DbContext
         {
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
-            // builder.HasData(new Group
-            // {
-            //     Id = "000000000000",
-            //     Title = "None",
-            // });
-
             builder.HasMany(g => g.Students)
                 .WithOne(s => s.Group)
                 .HasForeignKey(s => s.GroupId)
@@ -69,6 +63,11 @@ public sealed class ApplicationContext : DbContext
             builder.HasMany(g => g.PersonalSubjects)
                 .WithOne(s => s.User)
                 .HasForeignKey(s => s.UserId)
+                .IsRequired(false);
+
+            builder.HasOne(x => x.Subject)
+                .WithOne(x => x.Teacher)
+                .HasForeignKey<User>(x => x.SubjectId)
                 .IsRequired(false);
         });
 
@@ -114,6 +113,11 @@ public sealed class ApplicationContext : DbContext
             builder.HasMany(g => g.Marks)
                 .WithOne(s => s.Subject)
                 .HasForeignKey(s => s.SubjectId)
+                .IsRequired(false);
+
+            builder.HasOne(x => x.Teacher)
+                .WithOne(x => x.Subject)
+                .HasForeignKey<User>(x => x.SubjectId)
                 .IsRequired(false);
         });
 
