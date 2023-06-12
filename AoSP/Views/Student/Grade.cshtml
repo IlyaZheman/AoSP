@@ -1,8 +1,25 @@
-﻿@model TModel
+﻿@model AoSP.ViewModels.Student.StudentGradeViewModel
 
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
 }
 
-<h2>title</h2>
+@foreach (var subject in Model.PersonalSubjects)
+{
+    <div>
+        <h5>@subject.Title</h5>
+        <h6>@subject.Teacher.Surname @subject.Teacher.Name @subject.Teacher.Patronymic</h6>
+        <ul class="flex-grow-1">
+            @foreach (var task in subject.PersonalSubjectTasks)
+            {
+                <li>
+                    <div>
+                        <h5>@task.TaskTitle</h5>
+                        <p>@task.Score</p>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+}

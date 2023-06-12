@@ -1,4 +1,4 @@
-﻿@model GroupViewModel
+﻿@model AoSP.ViewModels.Admin.GroupViewModel
 
 @{
     ViewBag.Title = "title";
@@ -8,22 +8,22 @@
 <form asp-action="CreateGroup" asp-controller="Admin" method="post">
     <input id="groupTitle" type="text" class="form-control" asp-for="GroupTitle">
     <div>
-        <div id="students">
+        <div class="students">
             @foreach (var item in Model.Students)
             {
                 @await Html.PartialAsync("_Student", item)
             }
         </div>
-        <a id="addStudent" asp-action="AddStudent" asp-controller="Admin">Add Student</a>
+        <a class="addStudent" asp-action="AddStudent" asp-controller="Admin">Add Student</a>
     </div>
     <div>
-        <div id="subjects">
+        <div class="subjects">
             @foreach (var item in Model.Subjects)
             {
                 @await Html.PartialAsync("_Subject", item)
             }
         </div>
-        <a id="addSubject" asp-action="AddSubject" asp-controller="Admin">Add Subject</a>
+        <a class="addSubject" asp-action="AddSubject" asp-controller="Admin">Add Subject</a>
     </div>
     <input type="submit" id="submit" value="Save"/>
 </form>
@@ -69,6 +69,30 @@
                 formData.append("Subjects[" + i + "].Teacher.Patronymic", Patronymic);
             });
             
+            $(".subject").each(function (i) {
+                var nestedList = $(this).find(".subjectTask");
+                nestedList.each(function (j) {
+                    var value = $(this).find("input[name='Description']").val();
+                    formData.append("Subjects[" + i + "].SubjectTasks[" + j + "].Description", value);
+                });
+            });
+            
+            $(".subject").each(function (i) {
+                var nestedList = $(this).find(".mark");
+                nestedList.each(function (j) {
+                    var value = $(this).find("input[name='Date']").val();
+                    formData.append("Subjects[" + i + "].Marks[" + j + "].DateTime", value);
+                });
+            });
+            
+            $(".subject").each(function (i) {
+                var nestedList = $(this).find(".mark");
+                nestedList.each(function (j) {
+                    var value = $(this).find("input[name='Place']").val();
+                    formData.append("Subjects[" + i + "].Marks[" + j + "].Place", value);
+                });
+            });
+            
             $.ajax({
                 method: 'post',
                 url: '@Url.Action("CreateGroup", "Admin")',
@@ -80,23 +104,25 @@
             });
         });
 
-        $("#addStudent").click(function () {
+        $(".addStudent").click(function () {
+            var subjectTasksContainer = $(this).siblings(".students");
             $.ajax({
                 url: '@Url.Action("AddStudent", "Admin")',
                 cache: false,
                 success: function (html) {
-                    $("#students").append(html);
+                    subjectTasksContainer.append(html);
                 }
             });
             return false;
         });
         
-        $("#addSubject").click(function () {
+        $(".addSubject").click(function () {
+            var subjectTasksContainer = $(this).siblings(".subjects");
             $.ajax({
                 url: '@Url.Action("AddSubject", "Admin")',
                 cache: false,
                 success: function (html) {
-                    $("#subjects").append(html);
+                    subjectTasksContainer.append(html);
                 }
             });
             return false;

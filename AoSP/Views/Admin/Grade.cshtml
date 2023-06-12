@@ -1,4 +1,4 @@
-﻿@model GradeViewModel
+﻿@model AoSP.ViewModels.Admin.GradeViewModel
 
 @{
     ViewBag.Title = "title";
@@ -46,6 +46,12 @@
                     @foreach (var subject in group.Subjects)
                     {
                         <li>@subject.Title (@subject.Teacher.Surname @subject.Teacher.Name @subject.Teacher.Patronymic)</li>
+                        <ul>
+                            @foreach (var mark in subject.Marks)
+                            {
+                                <li>@mark.DateTime @mark.Place</li>
+                            }
+                        </ul>
                     }
                 </ul>
                 <h5 class="card-title">Студенты:</h5>

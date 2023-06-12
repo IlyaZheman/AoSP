@@ -10,11 +10,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AoSP.Services.Implementations;
 
-public class GradeService : IGradeService
+public class AdminGradeService : IAdminGradeService
 {
     private readonly IBaseRepository<Group> _groupRepository;
 
-    public GradeService(IBaseRepository<Group> groupRepository)
+    public AdminGradeService(IBaseRepository<Group> groupRepository)
     {
         _groupRepository = groupRepository;
     }
@@ -106,30 +106,57 @@ public class GradeService : IGradeService
                 };
             }
 
+            var subjects = model.Subjects.Select(x => new Subject
+            {
+                Title = x.Title,
+                Teacher = new User
+                {
+                    Id = Helper.GenerateId(),
+                    Name = x.Teacher.Name,
+                    Surname = x.Teacher.Surname,
+                    Patronymic = x.Teacher.Patronymic,
+                    Role = Role.Teacher
+                },
+                SubjectTasks = x.SubjectTasks.Select(s => new SubjectTask
+                {
+                    Id = Helper.GenerateId(),
+                    Description = s.Description,
+                }).ToList(),
+                Marks = x.Marks.Select(m => new Mark
+                {
+                    Id = Helper.GenerateId(),
+                    DateTime = m.DateTime,
+                    Place = m.Place,
+                }).ToList()
+            }).ToList();
+
+            var students = model.Students.Select(x => new User
+            {
+                Id = Helper.GenerateId(),
+                Name = x.Name,
+                Surname = x.Surname,
+                Patronymic = x.Patronymic,
+                Role = Role.Student,
+                PersonalSubjects = subjects.Select(p => new PersonalSubject
+                {
+                    Id = Helper.GenerateId(),
+                    SubjectId = p.Id,
+                    Subject = p,
+                    PersonalSubjectTasks = p.SubjectTasks.Select(t => new PersonalSubjectTask
+                    {
+                        Id = Helper.GenerateId(),
+                        SubjectTaskId = t.Id,
+                        SubjectTask = t,
+                    }).ToList(),
+                }).ToList(),
+            }).ToList();
+
             group = new Group
             {
                 Id = Helper.GenerateId(),
                 Title = model.GroupTitle,
-                Students = model.Students.Select(x => new User
-                {
-                    Id = Helper.GenerateId(),
-                    Name = x.Name,
-                    Surname = x.Surname,
-                    Patronymic = x.Patronymic,
-                    Role = Role.Student
-                }).ToList(),
-                Subjects = model.Subjects.Select(x => new Subject
-                {
-                    Title = x.Title,
-                    Teacher = new User
-                    {
-                        Id = Helper.GenerateId(),
-                        Name = x.Teacher.Name,
-                        Surname = x.Teacher.Surname,
-                        Patronymic = x.Teacher.Patronymic,
-                        Role = Role.Teacher
-                    }
-                }).ToList(),
+                Students = students,
+                Subjects = subjects,
             };
 
             foreach (var student in group.Students)

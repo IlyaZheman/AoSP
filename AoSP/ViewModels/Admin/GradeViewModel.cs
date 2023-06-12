@@ -1,4 +1,4 @@
-﻿namespace AoSP.ViewModels;
+﻿namespace AoSP.ViewModels.Admin;
 
 public class GradeViewModel
 {

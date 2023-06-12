@@ -1,0 +1,14 @@
+﻿@model AoSP.ViewModels.Admin.MarkViewModel
+
+<div class="mark">
+    <input type="datetime-local" id="localdate" name="Date"/>
+    <input type="text" id="place" name="Place"/>
+    <a href="#" class="delete">delete</a>
+</div>
+
+<script>
+    $("a.delete").on("click", function () {
+        $(this).parents("div.mark:first").remove();
+        return false;
+    });
+</script>

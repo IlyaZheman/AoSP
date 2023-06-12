@@ -1,8 +1,29 @@
-﻿@model TModel
+﻿@model AoSP.ViewModels.Teacher.TeacherGradeViewModel
 
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
 }
 
-<h2>title</h2>
+@foreach (var student in Model.Students)
+{
+    <h5>@student.Student.Surname @student.Student.Name @student.Student.Patronymic</h5>
+    @foreach (var subject in student.PersonalSubjects)
+    {
+        @if (subject.Teacher.Id == Model.Teacher.Id)
+        {
+            <ul class="flex-grow-1">
+                @foreach (var task in subject.PersonalSubjectTasks)
+                {
+                    <li>
+                        <div>
+                            <h5>@task.TaskTitle</h5>
+                            <input type="number" value="@task.Score" readonly="readonly">
+                        </div>
+                    </li>
+                }
+                //TODO: Сделать добавиление таски
+            </ul>
+        }
+    }
+}

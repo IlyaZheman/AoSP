@@ -1,14 +1,55 @@
-﻿@model SubjectViewModel
+﻿@model AoSP.ViewModels.Admin.SubjectViewModel
 
 <div class="subject">
     <span>Title: </span> @Html.EditorFor(m => m.Title)
     <span>Teacher Name: </span> @Html.EditorFor(m => m.Teacher.Name)
     <span>Teacher Surname: </span> @Html.EditorFor(m => m.Teacher.Surname)
     <span>Teacher Patronymic: </span> @Html.EditorFor(m => m.Teacher.Patronymic)
+
+    <div class="subjectTasks">
+        @foreach (var item in Model.SubjectTasks)
+        {
+            @await Html.PartialAsync("_SubjectTask", item)
+        }
+    </div>
+    <a class="addSubjectTask">Add Task</a>
+
+    <div class="marks">
+        @foreach (var item in Model.Marks)
+        {
+            @await Html.PartialAsync("_Mark", item)
+        }
+    </div>
+    <a class="addMark" asp-action="AddMark" asp-controller="Admin">Add Mark</a>
+
     <a href="#" class="delete">delete</a>
 </div>
 
 <script>
+    $(".addSubjectTask").click(function () {
+        var subjectTasksContainer = $(this).siblings(".subjectTasks");
+        $.ajax({
+            url: '@Url.Action("AddSubjectTask", "Admin")',
+            cache: false,
+            success: function (html) {
+                subjectTasksContainer.append(html);
+            }
+        });
+        return false;
+    });
+
+    $(".addMark").click(function () {
+        var subjectTasksContainer = $(this).siblings(".marks");
+        $.ajax({
+            url: '@Url.Action("AddMark", "Admin")',
+            cache: false,
+            success: function (html) {
+                subjectTasksContainer.append(html);
+            }
+        });
+        return false;
+    });
+    
     $("a.delete").on("click", function () {
         $(this).parents("div.subject:first").remove();
         return false;

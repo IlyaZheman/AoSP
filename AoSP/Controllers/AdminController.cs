@@ -1,5 +1,6 @@
 ﻿using AoSP.Services.Interfaces;
 using AoSP.ViewModels;
+using AoSP.ViewModels.Admin;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AoSP.Controllers;
@@ -7,19 +8,19 @@ namespace AoSP.Controllers;
 public class AdminController : Controller
 {
     private readonly IUserService _userService;
-    private readonly IGradeService _gradeService;
+    private readonly IAdminGradeService _adminGradeService;
 
     public AdminController(IUserService userService,
-        IGradeService gradeService)
+        IAdminGradeService adminGradeService)
     {
         _userService = userService;
-        _gradeService = gradeService;
+        _adminGradeService = adminGradeService;
     }
 
     [HttpGet]
     public async Task<IActionResult> Grade()
     {
-        var response = await _gradeService.Get();
+        var response = await _adminGradeService.Get();
         if (response.StatusCode == Enums.StatusCode.Ok)
         {
             return View(response.Data);
@@ -34,7 +35,7 @@ public class AdminController : Controller
     {
         if (ModelState.IsValid)
         {
-            var response = await _gradeService.Get(model.SelectedGroupId);
+            var response = await _adminGradeService.Get(model.SelectedGroupId);
             if (response.StatusCode == Enums.StatusCode.Ok)
             {
                 return View(response.Data);
@@ -57,7 +58,7 @@ public class AdminController : Controller
     {
         if (ModelState.IsValid)
         {
-            var response = await _gradeService.Create(model);
+            var response = await _adminGradeService.Create(model);
             if (response.StatusCode == Enums.StatusCode.Ok)
             {
                 return RedirectToAction("Grade", "Admin");
@@ -124,5 +125,15 @@ public class AdminController : Controller
     public async Task<IActionResult> AddSubject()
     {
         return PartialView("_Subject", new SubjectViewModel());
+    }
+
+    public async Task<IActionResult> AddSubjectTask()
+    {
+        return PartialView("_SubjectTask", new SubjectTaskViewModel());
+    }
+
+    public async Task<IActionResult> AddMark()
+    {
+        return PartialView("_Mark", new MarkViewModel());
     }
 }

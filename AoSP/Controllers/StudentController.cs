@@ -6,12 +6,12 @@ namespace AoSP.Controllers;
 public class StudentController : Controller
 {
     private readonly IUserService _userService;
-    private readonly IGradeService _gradeService;
+    private readonly IAdminGradeService _adminGradeService;
 
     public StudentController(IUserService userService,
-        IGradeService gradeService)
+        IAdminGradeService adminGradeService)
     {
         _userService = userService;
-        _gradeService = gradeService;
+        _adminGradeService = adminGradeService;
     }
 }
