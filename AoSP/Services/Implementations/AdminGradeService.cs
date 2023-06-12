@@ -5,6 +5,7 @@ using AoSP.Repositories.Interfaces;
 using AoSP.Response;
 using AoSP.Services.Interfaces;
 using AoSP.ViewModels;
+using AoSP.ViewModels.Admin;
 using Microsoft.EntityFrameworkCore;
 
 namespace AoSP.Services.Implementations;
@@ -26,12 +27,12 @@ public class GradeService : IGradeService
 
             if (groups == null || groups.Count <= 0)
             {
-                return new BaseResponse<GradeViewModel>()
+                return new BaseResponse<GradeViewModel>
                 {
                     Data = new GradeViewModel
                     {
                         SelectedGroupId = "",
-                        Groups = new System.Collections.Generic.List<GroupViewModel>()
+                        Groups = new List<GroupViewModel>()
                     },
                     StatusCode = StatusCode.Ok
                 };
@@ -48,10 +49,19 @@ public class GradeService : IGradeService
                     {
                         Id = subject.Id,
                         Title = subject.Title,
+                        Teacher = new UserViewModel
+                        {
+                            Id = subject.Teacher.Id,
+                            Name = subject.Teacher.Name,
+                            Surname = subject.Teacher.Surname,
+                            Patronymic = subject.Teacher.Patronymic,
+                            Login = subject.Teacher.Login,
+                            Role = subject.Teacher.Role,
+                        },
                         SubjectTasks = subject.SubjectTasks.Select(subjectTask => new SubjectTaskViewModel
                         {
                             Id = subjectTask.Id,
-                            Description = subjectTask.Description
+                            Description = subjectTask.Description,
                         }).ToList()
                     }).ToList(),
                     Students = group.Students.Select(user => new UserViewModel
@@ -61,7 +71,7 @@ public class GradeService : IGradeService
                         Surname = user.Surname,
                         Patronymic = user.Patronymic,
                         Login = user.Login,
-                        Role = user.Role
+                        Role = user.Role,
                     }).ToList()
                 }).ToList()
             };

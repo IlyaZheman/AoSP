@@ -11,7 +11,7 @@ public class User
     public string? Surname { get; set; }
     public string? Patronymic { get; set; }
     public Role Role { get; set; }
-    public virtual ICollection<PersonalSubject> PersonalSubjects { get; set; }
+    public virtual ICollection<PersonalSubject> PersonalSubjects { get; set; } = new List<PersonalSubject>();
 
     public string? GroupId { get; set; }
     public virtual Group Group { get; set; }

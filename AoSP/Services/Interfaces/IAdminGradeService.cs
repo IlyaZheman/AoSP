@@ -1,10 +1,11 @@
 ﻿using AoSP.Entities;
 using AoSP.Response;
 using AoSP.ViewModels;
+using AoSP.ViewModels.Admin;
 
 namespace AoSP.Services.Interfaces;
 
-public interface IGradeService
+public interface IAdminGradeService
 {
     Task<BaseResponse<GradeViewModel>> Get(string? selectedGroupId = null);
     Task<BaseResponse<Group>> Create(GroupViewModel model);

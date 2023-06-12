@@ -84,6 +84,11 @@ public sealed class ApplicationContext : DbContext
                 .WithOne(s => s.PersonalSubject)
                 .HasForeignKey(s => s.PersonalSubjectId)
                 .IsRequired(false);
+
+            builder.HasOne(s => s.Subject)
+                .WithMany(g => g.PersonalSubjects)
+                .HasForeignKey(s => s.SubjectId)
+                .IsRequired(false);
         });
 
         modelBuilder.Entity<PersonalSubjectTask>(builder =>
@@ -93,6 +98,11 @@ public sealed class ApplicationContext : DbContext
             builder.HasOne(s => s.PersonalSubject)
                 .WithMany(g => g.PersonalSubjectTasks)
                 .HasForeignKey(s => s.PersonalSubjectId)
+                .IsRequired(false);
+
+            builder.HasOne(s => s.SubjectTask)
+                .WithMany(g => g.PersonalSubjectTasks)
+                .HasForeignKey(s => s.SubjectTaskId)
                 .IsRequired(false);
         });
 
@@ -119,6 +129,11 @@ public sealed class ApplicationContext : DbContext
                 .WithOne(x => x.Subject)
                 .HasForeignKey<User>(x => x.SubjectId)
                 .IsRequired(false);
+
+            builder.HasMany(g => g.PersonalSubjects)
+                .WithOne(s => s.Subject)
+                .HasForeignKey(s => s.SubjectId)
+                .IsRequired(false);
         });
 
         modelBuilder.Entity<SubjectTask>(builder =>
@@ -128,6 +143,11 @@ public sealed class ApplicationContext : DbContext
             builder.HasOne(s => s.Subject)
                 .WithMany(g => g.SubjectTasks)
                 .HasForeignKey(s => s.SubjectId)
+                .IsRequired(false);
+
+            builder.HasMany(g => g.PersonalSubjectTasks)
+                .WithOne(s => s.SubjectTask)
+                .HasForeignKey(s => s.SubjectTaskId)
                 .IsRequired(false);
         });
 
