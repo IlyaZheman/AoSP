@@ -51,6 +51,10 @@
                 var Patronymic = $(this).val();
                 formData.append("Students[" + i + "].Patronymic", Patronymic);
             });
+            $("input[name='Login']").each(function (i) {
+                var Login = $(this).val();
+                formData.append("Students[" + i + "].Login", Login);
+            });
             
             $("input[name='Title']").each(function (i) {
                 var Title = $(this).val();
@@ -67,6 +71,10 @@
             $("input[name='Teacher.Patronymic']").each(function (i) {
                 var Patronymic = $(this).val();
                 formData.append("Subjects[" + i + "].Teacher.Patronymic", Patronymic);
+            });
+            $("input[name='Teacher.Login']").each(function (i) {
+                var Login = $(this).val();
+                formData.append("Subjects[" + i + "].Teacher.Login", Login);
             });
             
             $(".subject").each(function (i) {

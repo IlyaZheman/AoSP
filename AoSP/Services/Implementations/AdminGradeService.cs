@@ -115,6 +115,7 @@ public class AdminGradeService : IAdminGradeService
                     Name = x.Teacher.Name,
                     Surname = x.Teacher.Surname,
                     Patronymic = x.Teacher.Patronymic,
+                    Login = x.Teacher.Login,
                     Role = Role.Teacher
                 },
                 SubjectTasks = x.SubjectTasks.Select(s => new SubjectTask
@@ -136,6 +137,7 @@ public class AdminGradeService : IAdminGradeService
                 Name = x.Name,
                 Surname = x.Surname,
                 Patronymic = x.Patronymic,
+                Login = x.Login,
                 Role = Role.Student,
                 PersonalSubjects = subjects.Select(p => new PersonalSubject
                 {
