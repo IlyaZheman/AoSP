@@ -62,12 +62,14 @@ public class StudentGradeService : IStudentGradeService
                 {
                     Id = s.Id,
                     TaskTitle = s.SubjectTask.Title,
+                    Description = s.SubjectTask.Description,
                     Score = s.Score,
-                    //TODO:: Дописать
-                    // File = new FormFile(new MemoryStream(s.File), 0, s.File.Length, "name", "fileName"),
+                    File = string.IsNullOrWhiteSpace(s.FileName)
+                        ? null
+                        : new FormFile(new MemoryStream(s.File), 0, s.File.Length, "name", s.FileName),
                 }).ToList(),
             }).ToList();
-            
+
             var views = new StudentGradeViewModel
             {
                 Student = student,
@@ -106,6 +108,7 @@ public class StudentGradeService : IStudentGradeService
                 };
             }
 
+            task.FileName = model.File.FileName;
             task.File = Helper.GetByteArrayFromFile(model.File);
 
             await _personalSubjectTask.Update(task);
@@ -142,7 +145,7 @@ public class StudentGradeService : IStudentGradeService
                 };
             }
 
-            Helper.DownloadFileFromByteArray(task.File);
+            Helper.DownloadFileFromByteArray(task.FileName, task.File);
 
             return new BaseResponse<bool>
             {

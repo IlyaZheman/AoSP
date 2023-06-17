@@ -1,9 +1,9 @@
 ﻿@model AoSP.ViewModels.Admin.MarkViewModel
 
-<div class="mark">
-    <input type="datetime-local" id="localdate" name="Date"/>
-    <input type="text" id="place" name="Place"/>
-    <a href="#" class="delete">delete</a>
+<div class="mark d-flex">
+    <input type="datetime-local" class="form-control flex-fill" name="Date"/>
+    <input type="text" class="form-control flex-fill" name="Place"/>
+    <a href="#" class="delete btn btn-outline-danger flex-shrink-1">delete</a>
 </div>
 
 <script>

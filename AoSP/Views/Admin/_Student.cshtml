@@ -1,11 +1,11 @@
 ﻿@model UserViewModel
 
-<div class="student">
-    <span>Name: </span> @Html.EditorFor(m => m.Name)
-    <span>Surname: </span> @Html.EditorFor(m => m.Surname)
-    <span>Patronymic: </span> @Html.EditorFor(m => m.Patronymic)
-    <span>Login: </span> @Html.EditorFor(m => m.Login)
-    <a href="#" class="delete">delete</a>
+<div class="student d-flex">
+    <input type="text" class="form-control flex-fill" placeholder="Name" asp-for="Name">
+    <input type="text" class="form-control flex-fill" placeholder="Surname" asp-for="Surname">
+    <input type="text" class="form-control flex-fill" placeholder="Patronymic" asp-for="Patronymic">
+    <input type="text" class="form-control flex-fill" placeholder="Login" asp-for="Login">
+    <a href="#" class="delete btn btn-outline-danger flex-shrink-1">delete</a>
 </div>
 
 <script>

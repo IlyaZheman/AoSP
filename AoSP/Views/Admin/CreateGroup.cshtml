@@ -8,24 +8,24 @@
 <form asp-action="CreateGroup" asp-controller="Admin" method="post">
     <input id="groupTitle" type="text" class="form-control" asp-for="GroupTitle">
     <div>
-        <div class="students">
+        <div class="students form-group">
             @foreach (var item in Model.Students)
             {
                 @await Html.PartialAsync("_Student", item)
             }
         </div>
-        <a class="addStudent" asp-action="AddStudent" asp-controller="Admin">Add Student</a>
+        <a class="addStudent btn btn-primary" asp-action="AddStudent" asp-controller="Admin">Add Student</a>
     </div>
     <div>
-        <div class="subjects">
+        <div class="subjects form-group">
             @foreach (var item in Model.Subjects)
             {
                 @await Html.PartialAsync("_Subject", item)
             }
         </div>
-        <a class="addSubject" asp-action="AddSubject" asp-controller="Admin">Add Subject</a>
+        <a class="addSubject btn btn-primary" asp-action="AddSubject" asp-controller="Admin">Add Subject</a>
     </div>
-    <input type="submit" id="submit" value="Save"/>
+    <input class="btn btn-success" type="submit" id="submit" value="Save"/>
 </form>
 
 @section scripts {
@@ -78,32 +78,22 @@
             });
             
             $(".subject").each(function (i) {
-                var nestedList = $(this).find(".subjectTask");
-                nestedList.each(function (j) {
+                var subjectTasks = $(this).find(".subjectTask");
+                subjectTasks.each(function (j) {
                     var value = $(this).find("input[name='TaskTitle']").val();
                     formData.append("Subjects[" + i + "].SubjectTasks[" + j + "].TaskTitle", value);
                 });
-            });
-            
-            $(".subject").each(function (i) {
-                var nestedList = $(this).find(".subjectTask");
-                nestedList.each(function (j) {
+                subjectTasks.each(function (j) {
                     var value = $(this).find("input[name='Description']").val();
                     formData.append("Subjects[" + i + "].SubjectTasks[" + j + "].Description", value);
                 });
-            });
             
-            $(".subject").each(function (i) {
-                var nestedList = $(this).find(".mark");
-                nestedList.each(function (j) {
+                var marks = $(this).find(".mark");
+                marks.each(function (j) {
                     var value = $(this).find("input[name='Date']").val();
                     formData.append("Subjects[" + i + "].Marks[" + j + "].DateTime", value);
                 });
-            });
-            
-            $(".subject").each(function (i) {
-                var nestedList = $(this).find(".mark");
-                nestedList.each(function (j) {
+                marks.each(function (j) {
                     var value = $(this).find("input[name='Place']").val();
                     formData.append("Subjects[" + i + "].Marks[" + j + "].Place", value);
                 });

@@ -51,9 +51,10 @@ public static class Helper
     private static extern int SHGetKnownFolderPath([MarshalAs(UnmanagedType.LPStruct)] Guid rfid, uint dwFlags,
         IntPtr hToken, out string pszPath);
 
-    public static void DownloadFileFromByteArray(byte[] bytes)
+    public static void DownloadFileFromByteArray(string fileName, byte[] bytes)
     {
         SHGetKnownFolderPath(new Guid("374DE290-123F-4565-9164-39C4925E467B"), 0, IntPtr.Zero, out var downloads);
+        downloads += $"\\{fileName}";
         using (var fileStream = new FileStream(downloads, FileMode.Create))
         {
             fileStream.Write(bytes, 0, bytes.Length);
