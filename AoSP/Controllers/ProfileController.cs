@@ -14,16 +14,13 @@ namespace AoSP.Controllers
 
         public async Task<IActionResult> Detail()
         {
-            if (User.Identity == null)
-                throw new Exception("User identity = null");
-            var userName = User.Identity.Name;
-            if (userName == null)
-                throw new Exception("User identity name = null");
-            var response = await _userService.GetByUserName(userName);
-            if (response == null)
-                throw new Exception($"Profile {userName} not found");
+            var response = await _userService.GetByUserName(User.Identity.Name);
+            if (response.StatusCode == Enums.StatusCode.Ok)
+            {
+                return View(response.Data);
+            }
 
-            return response.StatusCode == Enums.StatusCode.Ok ? View(response.Data) : View();
+            throw new Exception($"Profile {User.Identity.Name} not found");
         }
     }
 }

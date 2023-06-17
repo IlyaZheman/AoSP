@@ -1,7 +1,8 @@
 ﻿@model AoSP.ViewModels.Admin.SubjectTaskViewModel
 
 <div class="subjectTask">
-    <span>Title: </span> @Html.EditorFor(m => m.Description)
+    <span>Title: </span> @Html.EditorFor(m => m.TaskTitle)
+    <span>Description: </span> @Html.EditorFor(m => m.Description)
     <a href="#" class="delete">delete</a>
 </div>
 

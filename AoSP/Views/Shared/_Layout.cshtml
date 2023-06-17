@@ -55,11 +55,15 @@
                         }
                         @if (User.IsInRole(Role.Student.ToString()))
                         {
-                            <p>Студент</p>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="Grade">Grade</a>
+                            </li>
                         }
                         @if (User.IsInRole(Role.Teacher.ToString()))
                         {
-                            <p>Учитель</p>
+                            @* <li class="nav-item"> *@
+                            @*     <a class="nav-link text-dark" asp-area="" asp-controller="Teacher" asp-action="Grade">Grade</a> *@
+                            @* </li> *@
                         }
 
                         <li class="nav-item">

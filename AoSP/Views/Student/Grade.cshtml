@@ -17,6 +17,25 @@
                     <div>
                         <h5>@task.TaskTitle</h5>
                         <p>@task.Score</p>
+                        @if (task.File != null)
+                        {
+                            <form class="col-xs-12" method="post" asp-controller="Student" asp-action="DownloadFile">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary col-xs-12">Download</button>
+                                </div>
+                            </form>
+                        }
+                        else
+                        {
+                            <form class="col-xs-12" method="post" asp-controller="Student" asp-action="UploadFile" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <input type="file" class="form-control" name="file"/>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary col-xs-12">Upload</button>
+                                </div>
+                            </form>
+                        }
                     </div>
                 </li>
             }

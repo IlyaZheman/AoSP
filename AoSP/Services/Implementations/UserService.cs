@@ -217,7 +217,7 @@ public class UserService : IUserService
     {
         try
         {
-            var profile = await _userRepository.GetAll()
+            var user = await _userRepository.GetAll()
                 .Select(x => new UserViewModel()
                 {
                     Id = x.Id,
@@ -231,7 +231,7 @@ public class UserService : IUserService
 
             return new BaseResponse<UserViewModel>()
             {
-                Data = profile,
+                Data = user,
                 StatusCode = StatusCode.Ok
             };
         }

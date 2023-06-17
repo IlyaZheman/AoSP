@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace AoSP.Helpers;
@@ -26,5 +27,36 @@ public static class Helper
             .Take(12)
             .ToList().ForEach(e => builder.Append(e));
         return builder.ToString();
+    }
+
+    public static string GetUniqueFileName(string fileName)
+    {
+        fileName = Path.GetFileName(fileName);
+        return Path.GetFileNameWithoutExtension(fileName)
+            + "_"
+            + Guid.NewGuid().ToString().Substring(0, 4)
+            + Path.GetExtension(fileName);
+    }
+
+    public static byte[] GetByteArrayFromFile(IFormFile file)
+    {
+        using (var target = new MemoryStream())
+        {
+            file.CopyTo(target);
+            return target.ToArray();
+        }
+    }
+
+    [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
+    private static extern int SHGetKnownFolderPath([MarshalAs(UnmanagedType.LPStruct)] Guid rfid, uint dwFlags,
+        IntPtr hToken, out string pszPath);
+
+    public static void DownloadFileFromByteArray(byte[] bytes)
+    {
+        SHGetKnownFolderPath(new Guid("374DE290-123F-4565-9164-39C4925E467B"), 0, IntPtr.Zero, out var downloads);
+        using (var fileStream = new FileStream(downloads, FileMode.Create))
+        {
+            fileStream.Write(bytes, 0, bytes.Length);
+        }
     }
 }

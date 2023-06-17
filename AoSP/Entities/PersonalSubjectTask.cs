@@ -4,6 +4,7 @@ public class PersonalSubjectTask
 {
     public string Id { get; set; }
     public int? Score { get; set; }
+    public virtual byte[]? File { get; set; }
 
     public string? PersonalSubjectId { get; set; }
     public virtual PersonalSubject PersonalSubject { get; set; }

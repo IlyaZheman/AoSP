@@ -80,6 +80,14 @@
             $(".subject").each(function (i) {
                 var nestedList = $(this).find(".subjectTask");
                 nestedList.each(function (j) {
+                    var value = $(this).find("input[name='TaskTitle']").val();
+                    formData.append("Subjects[" + i + "].SubjectTasks[" + j + "].TaskTitle", value);
+                });
+            });
+            
+            $(".subject").each(function (i) {
+                var nestedList = $(this).find(".subjectTask");
+                nestedList.each(function (j) {
                     var value = $(this).find("input[name='Description']").val();
                     formData.append("Subjects[" + i + "].SubjectTasks[" + j + "].Description", value);
                 });

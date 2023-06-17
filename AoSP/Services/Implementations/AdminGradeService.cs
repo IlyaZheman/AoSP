@@ -108,6 +108,7 @@ public class AdminGradeService : IAdminGradeService
 
             var subjects = model.Subjects.Select(x => new Subject
             {
+                Id = Helper.GenerateId(),
                 Title = x.Title,
                 Teacher = new User
                 {
@@ -116,11 +117,12 @@ public class AdminGradeService : IAdminGradeService
                     Surname = x.Teacher.Surname,
                     Patronymic = x.Teacher.Patronymic,
                     Login = x.Teacher.Login,
-                    Role = Role.Teacher
+                    Role = Role.Teacher,
                 },
                 SubjectTasks = x.SubjectTasks.Select(s => new SubjectTask
                 {
                     Id = Helper.GenerateId(),
+                    Title = s.TaskTitle,
                     Description = s.Description,
                 }).ToList(),
                 Marks = x.Marks.Select(m => new Mark
