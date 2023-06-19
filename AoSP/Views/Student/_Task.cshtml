@@ -1,15 +1,15 @@
 ﻿@model AoSP.ViewModels.Student.PersonalSubjectTaskViewModel
 
 <div>
-    <h5>@Model.TaskTitle</h5>
-    <h6>@Model.Description</h6>
-    <p>@Model.Score</p>
+    <h5 class="form-label">@Model.TaskTitle</h5>
+    <h6 class="form-label">@Model.Description</h6>
+    <h6 class="form-label">@Model.Score</h6>
     @if (Model.File == null)
     {
         <form class="upload-form col-xs-12" method="post" asp-controller="Student" asp-action="UploadFile" enctype="multipart/form-data">
             <div class="form-group">
                 <input type="text" asp-for="Id" hidden="hidden"/>
-                <input type="text" asp-for="TaskTitle" hidden="hidden"/>
+                @* <input type="text" asp-for="TaskTitle" hidden="hidden"/> *@
                 <input type="text" asp-for="Score" hidden="hidden"/>
                 <input type="file" class="form-control" asp-for="File"/>
                 <button type="submit" class="upload-file btn btn-primary col-xs-12">Upload</button>
@@ -21,7 +21,7 @@
         <form class="upload-form col-xs-12" method="post" asp-controller="Student" asp-action="DownloadFile" enctype="multipart/form-data">
             <div class="form-group">
                 <input type="text" asp-for="Id" hidden="hidden"/>
-                <input type="text" asp-for="TaskTitle" hidden="hidden"/>
+                @* <input type="text" asp-for="TaskTitle" hidden="hidden"/> *@
                 <input type="text" asp-for="Score" hidden="hidden"/>
                 <input type="file" asp-for="File" hidden="hidden"/>
                 <button type="submit" class="upload-file btn btn-primary col-xs-12">Download</button>
