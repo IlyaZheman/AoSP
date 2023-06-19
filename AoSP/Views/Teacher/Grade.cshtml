@@ -5,9 +5,11 @@
     Layout = "_Layout";
 }
 
-<h4>@Model.Subject.Title</h4>
+<h2>@Model.Subject.Title</h2>
 
 @foreach (var student in Model.Subject.Students)
 {
-    @await Html.PartialAsync("_Student", student)
+    <div>
+        @await Html.PartialAsync("_Student", student)
+    </div>
 }

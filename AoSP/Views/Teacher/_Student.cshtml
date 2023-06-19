@@ -1,11 +1,19 @@
 ﻿@model AoSP.ViewModels.Teacher.StudentViewModel
 
 <div>
-    <h5>@Model.Surname @Model.Name @Model.Patronymic</h5>
-    <ul class="flex-grow-1">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>
+                <h4>@Model.Surname @Model.Name @Model.Patronymic</h4>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
         @foreach (var task in Model.Tasks)
         {
             @await Html.PartialAsync("_Task", task)
         }
-    </ul>
+        </tbody>
+    </table>
 </div>

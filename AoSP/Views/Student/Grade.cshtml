@@ -8,15 +8,20 @@
 @foreach (var subject in Model.PersonalSubjects)
 {
     <div>
-        <h5>@subject.Title</h5>
-        <h6>@subject.Teacher.Surname @subject.Teacher.Name @subject.Teacher.Patronymic</h6>
-        <ul class="flex-grow-1">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>
+                    <h3>@subject.Title (@subject.Teacher.Surname @subject.Teacher.Name @subject.Teacher.Patronymic)</h3>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
             @foreach (var task in subject.PersonalSubjectTasks)
             {
-                <li>
-                    @await Html.PartialAsync("_Task", task)
-                </li>
+                @await Html.PartialAsync("_Task", task)
             }
-        </ul>
+            </tbody>
+        </table>
     </div>
 }
