@@ -1,0 +1,8 @@
+﻿@model UserViewModel
+
+<form asp-controller="Admin" asp-action="EditUser" method="post">
+    <input asp-for="Id" hidden="hidden">
+    @Model.Name @Model.Surname @Model.Patronymic
+     <button type="submit" class="btn btn-outline-info" style="height: 25px; font-size: 9px">Редактировать</button>
+</form>
+

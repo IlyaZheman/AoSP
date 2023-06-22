@@ -25,13 +25,10 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Schedule</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Расписание</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Journal</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Авторизация</a>
                         </li>
                     </ul>
                 </div>
@@ -41,28 +38,28 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Расписание</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Profile" asp-action="Detail">Profile</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Profile" asp-action="Detail">Профиль</a>
                         </li>
 
                         @if (User.IsInRole(Role.Admin.ToString()))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Grade">Grade</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Grade">Успеваемость</a>
                             </li>
                         }
                         @if (User.IsInRole(Role.Student.ToString()))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="Grade">Grade</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="Grade">Успеваемость</a>
                             </li>
                         }
                         @if (User.IsInRole(Role.Teacher.ToString()))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Teacher" asp-action="Grade">Grade</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Teacher" asp-action="Grade">Успеваемость</a>
                             </li>
                         }
 

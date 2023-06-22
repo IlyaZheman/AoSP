@@ -45,11 +45,16 @@
                 <ul class="flex-grow-1">
                     @foreach (var subject in group.Subjects)
                     {
-                        <li>@subject.Title (@subject.Teacher.Surname @subject.Teacher.Name @subject.Teacher.Patronymic)</li>
+                        <li>
+                            @subject.Title (@subject.Teacher.Surname @subject.Teacher.Name @subject.Teacher.Patronymic)
+                            <button class="btn btn-outline-info" style="height: 25px; font-size: 9px">Редактировать</button>
+                        </li>
                         <ul>
                             @foreach (var mark in subject.Marks)
                             {
-                                <li>@mark.DateTime @mark.Place</li>
+                                <li>
+                                    @mark.DateTime @mark.Place
+                                </li>
                             }
                         </ul>
                     }
@@ -58,7 +63,10 @@
                 <ul class="flex-grow-1">
                     @foreach (var student in group.Students)
                     {
-                        <li>@student.Name @student.Surname @student.Patronymic</li>
+                        <li>
+                            @await Html.PartialAsync("_EditStudent", student)
+                        </li>
+                        
                     }
                 </ul>
             }

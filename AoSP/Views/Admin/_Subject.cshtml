@@ -1,12 +1,12 @@
 ﻿@model AoSP.ViewModels.Admin.SubjectViewModel
 
 <div class="subject">
-    <input type="text" class="form-control" placeholder="Title" asp-for="Title">
+    <input type="text" class="form-control" placeholder="Предмет" asp-for="Title">
     <div class="d-flex">
-        <input type="text" class="form-control flex-fill" placeholder="Teacher Name" asp-for="Teacher.Name">
-        <input type="text" class="form-control flex-fill" placeholder="Teacher Surname" asp-for="Teacher.Surname">
-        <input type="text" class="form-control flex-fill" placeholder="Teacher Patronymic" asp-for="Teacher.Patronymic">
-        <input type="text" class="form-control flex-fill" placeholder="Teacher Login" asp-for="Teacher.Login">
+        <input type="text" class="form-control flex-fill" placeholder="Имя преподавателя" asp-for="Teacher.Name">
+        <input type="text" class="form-control flex-fill" placeholder="Фамилия преподавателя" asp-for="Teacher.Surname">
+        <input type="text" class="form-control flex-fill" placeholder="Отчество преподавателя" asp-for="Teacher.Patronymic">
+        <input type="text" class="form-control flex-fill" placeholder="Логин преподавателя" asp-for="Teacher.Login">
     </div>
 
     <div class="subjectTasks">
@@ -15,7 +15,7 @@
             @await Html.PartialAsync("_SubjectTask", item)
         }
     </div>
-    <a class="addSubjectTask btn btn-primary">Add Task</a>
+    <a class="addSubjectTask btn btn-primary">Добавить задание</a>
 
     <div class="marks">
         @foreach (var item in Model.Marks)
@@ -23,9 +23,9 @@
             @await Html.PartialAsync("_Mark", item)
         }
     </div>
-    <a class="addMark btn btn-primary" asp-action="AddMark" asp-controller="Admin">Add Mark</a>
+    <a class="addMark btn btn-primary" asp-action="AddMark" asp-controller="Admin">Добавить дату</a>
 
-    <a href="#" class="delete btn btn-outline-danger flex-shrink-1">delete</a>
+    <a href="#" class="delete btn btn-outline-danger flex-shrink-1">Удалить</a>
 </div>
 
 <script>

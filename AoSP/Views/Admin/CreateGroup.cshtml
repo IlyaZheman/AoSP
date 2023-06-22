@@ -14,7 +14,7 @@
                 @await Html.PartialAsync("_Student", item)
             }
         </div>
-        <a class="addStudent btn btn-primary" asp-action="AddStudent" asp-controller="Admin">Add Student</a>
+        <a class="addStudent btn btn-primary" asp-action="AddStudent" asp-controller="Admin">Добавить студента</a>
     </div>
     <div>
         <div class="subjects form-group">
@@ -23,9 +23,9 @@
                 @await Html.PartialAsync("_Subject", item)
             }
         </div>
-        <a class="addSubject btn btn-primary" asp-action="AddSubject" asp-controller="Admin">Add Subject</a>
+        <a class="addSubject btn btn-primary" asp-action="AddSubject" asp-controller="Admin">Добавить предмет</a>
     </div>
-    <input class="btn btn-success" type="submit" id="submit" value="Save"/>
+    <input class="btn btn-success" type="submit" id="submit" value="Сохранить"/>
 </form>
 
 @section scripts {
