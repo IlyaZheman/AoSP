@@ -64,9 +64,12 @@
                     @foreach (var student in group.Students)
                     {
                         <li>
-                            @await Html.PartialAsync("_EditStudent", student)
+                            @student.Name @student.Surname @student.Patronymic
+                            <a class="btn btn-outline-success" asp-controller="Admin" asp-action="EditUser" asp-route-id="@student.Id"
+                               method="get" style="height: 25px; font-size: 9px">
+                                Редактировать
+                            </a>
                         </li>
-                        
                     }
                 </ul>
             }
